@@ -5,16 +5,16 @@
  */
 package edu.Class.Figure;
 
+import edu.Interface.Figure;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
-import java.io.Serializable;
 
-public class Line implements Serializable, edu.Interface.Figure {
+public class Arc implements Figure {
 
     private double xStart, yStart;
     private double xEnd, yEnd;
 
-    public Line(double xStart, double yStart, double xEnd, double yEnd) {
+    public Arc(double xStart, double yStart, double xEnd, double yEnd) {
         this.xStart = xStart;
         this.yStart = yStart;
         this.xEnd = xEnd;
@@ -57,6 +57,7 @@ public class Line implements Serializable, edu.Interface.Figure {
     public void paint(Graphics2D g2) {
         Line2D.Double l = new Line2D.Double(xStart, yStart, xEnd, yEnd);
         g2.draw(l);
+        drawArc(g2);
 
     }
 
@@ -74,4 +75,13 @@ public class Line implements Serializable, edu.Interface.Figure {
         this.yStart = y;
     }
 
+    private void drawArc(Graphics2D g2) {
+        double arc = Math.atan2(this.getyEnd() - this.getyStart(), this.getxEnd() - this.getxStart());
+        double x = this.getxEnd() - 15 * Math.cos(arc + Math.PI / 6);
+        double y = this.getyEnd() - 15 * Math.sin(arc + Math.PI / 6);
+        g2.draw(new Line2D.Double(this.getxEnd(), this.getyEnd(), x, y));
+        x = this.getxEnd() - 15 * Math.cos(arc - Math.PI / 6);
+        y = this.getyEnd() - 15 * Math.sin(arc - Math.PI / 6);
+        g2.draw(new Line2D.Double(this.getxEnd(), this.getyEnd(), x, y));
+    }
 }

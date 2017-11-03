@@ -19,7 +19,7 @@ public class Paint extends javax.swing.JFrame {
     public Paint() {
         initComponents();
         add(pp, java.awt.BorderLayout.CENTER);
-        this.setSize(1000, 800);
+        this.setSize(1000, 600);
         pp.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
@@ -47,7 +47,7 @@ public class Paint extends javax.swing.JFrame {
             @Override
             public void mouseReleased(MouseEvent me) {
                     if ("square".equals(whatDraw)) {
-                    pp.addSquare(drawSquare);
+                   // pp.addSquare(drawSquare);
                 }
             }
 
@@ -119,6 +119,11 @@ public class Paint extends javax.swing.JFrame {
         });
 
         jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/line.png"))); // NOI18N
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
 
         jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/rhomb.png"))); // NOI18N
         jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -130,6 +135,11 @@ public class Paint extends javax.swing.JFrame {
         jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/circle.png"))); // NOI18N
 
         jToggleButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/triangle.png"))); // NOI18N
+        jToggleButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton5ActionPerformed(evt);
+            }
+        });
 
         jToggleButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/square.png"))); // NOI18N
         jToggleButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -207,8 +217,16 @@ public class Paint extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButton6ActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-        whatDraw = "";
+        whatDraw = "arc";
     }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+        whatDraw = "line";
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
+
+    private void jToggleButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton5ActionPerformed
+        whatDraw = "triangle";
+    }//GEN-LAST:event_jToggleButton5ActionPerformed
 
     /**
      * @param args the command line arguments
