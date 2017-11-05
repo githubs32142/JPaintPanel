@@ -1,3 +1,6 @@
 /build/
 /dist/
 /nbproject/private/
+/OnkoTest/.nb-gradle/
+/OnkoTest1/.nb-gradle/
+/OnkoTest1/build/

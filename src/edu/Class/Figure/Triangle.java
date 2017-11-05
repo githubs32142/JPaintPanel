@@ -7,6 +7,7 @@ package edu.Class.Figure;
 
 import edu.Interface.Figure;
 import edu.Interface.IChechSquare;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -19,6 +20,9 @@ public class Triangle implements Serializable, Figure {
     private double x, y, width, height;
     private boolean fill;
     private List<Point> points = new ArrayList();
+    private Color colorFill;
+    private Color colorBorder;
+    
 
     public Triangle(double x, double y, double weight, double height) {
         this.x = x;
@@ -74,6 +78,22 @@ public class Triangle implements Serializable, Figure {
         return fill;
     }
 
+    public Color getColorFill() {
+        return colorFill;
+    }
+
+    public void setColorFill(Color colorFill) {
+        this.colorFill = colorFill;
+    }
+
+    public Color getColorBorder() {
+        return colorBorder;
+    }
+
+    public void setColorBorder(Color colorBorder) {
+        this.colorBorder = colorBorder;
+    }
+
     @Override
     public void paint(Graphics2D g2) {
         Polygon p = new Polygon();
@@ -113,5 +133,5 @@ public class Triangle implements Serializable, Figure {
         points.add(new Point((int) x, (int) (y + height)));
         points.add(new Point((int) ((x + this.width)), (int) (y + height)));
     }
-
+    
 }

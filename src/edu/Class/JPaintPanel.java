@@ -20,6 +20,7 @@ public class JPaintPanel extends JPanel {
     private Triangle drawTriangle = new Triangle(0, 0, 0, 0);
     private Rhomb drawRhomb = new Rhomb(0, 0, 0, 0);
     private Line drawLine = new Line(0, 0, 0, 0);
+    private Arc drawArc = new Arc(0, 0, 0, 0);
     List<Square> square = new ArrayList<>();
     List<Triangle> triangles = new ArrayList<>();
     List<Line> lines = new ArrayList<>();
@@ -61,6 +62,12 @@ public class JPaintPanel extends JPanel {
         }
         if (drawRhomb != null) {
             drawRhomb.paint(g2D);
+        }
+        if(drawLine!= null){
+            drawLine.paint(g2D);
+        }
+        if(drawArc!= null){
+            drawArc.paint(g2D);
         }
 
     }
@@ -242,6 +249,15 @@ public class JPaintPanel extends JPanel {
         this.drawLine = drawLine;
     }
 
+    public Arc getDrawArc() {
+        return drawArc;
+    }
+
+    public void setDrawArc(Arc drawArc) {
+        this.drawArc = drawArc;
+    }
+    
+
     public WhatClicked whatFigureClicked(double x, double y) {
         int tmp = returnIndexSquare(x, y);
         WhatClicked wC = new WhatClicked(-1, "");
@@ -254,6 +270,7 @@ public class JPaintPanel extends JPanel {
 
     /**
      ** Metoda, która dodaje obiekt
+     *
      * @param typeObj typ obiektu
      * @param t obiekt
      */

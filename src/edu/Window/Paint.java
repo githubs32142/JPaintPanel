@@ -1,8 +1,11 @@
 package edu.Window;
 
+import edu.Class.Figure.Arc;
+import edu.Class.Figure.Line;
 import edu.Class.Figure.Rhomb;
 import edu.Class.JPaintPanel;
 import edu.Class.Figure.Square;
+import edu.Class.Figure.Triangle;
 import edu.Class.WhatClicked;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,6 +16,9 @@ public class Paint extends javax.swing.JFrame {
     JPaintPanel pp = new JPaintPanel();
     private Rhomb drawRhomb = new Rhomb(0, 0, 0, 0);
     private Square drawSquare = new Square(0, 0, 0);
+    private Triangle drawTriangle = new Triangle(0, 0, 0, 0);
+    private Arc drawArc = new Arc(0, 0, 0, 0);
+    private Line drawLine = new Line(0, 0, 0, 0);
     String whatDraw = "";
     private WhatClicked wC = new WhatClicked();
 
@@ -23,7 +29,7 @@ public class Paint extends javax.swing.JFrame {
         pp.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
-               wC=pp.whatFigureClicked(me.getX(), me.getY());
+                wC = pp.whatFigureClicked(me.getX(), me.getY());
                 System.out.println(wC.getId());
             }
 
@@ -31,14 +37,32 @@ public class Paint extends javax.swing.JFrame {
             public void mousePressed(MouseEvent me) {
                 if ("rhomb".equals(whatDraw)) {
                     drawRhomb = pp.getDrawRhomb();
-                    drawRhomb = new Rhomb(me.getX(), me.getY(), 110, 110);
+                    drawRhomb = new Rhomb(me.getX(), me.getY(), 0, 0);
                     pp.setDrawRhomb(drawRhomb);
                     pp.repaint();
                 }
                 if ("square".equals(whatDraw)) {
                     drawSquare = pp.getDrawSquare();
-                    drawSquare = new Square(me.getX(), me.getY(),0);
+                    drawSquare = new Square(me.getX(), me.getY(), 0);
                     pp.setDrawSquare(drawSquare);
+                    pp.repaint();
+                }
+                if ("triangle".equals(whatDraw)) {
+                    drawTriangle = pp.getDrawTriangle();
+                    drawTriangle = new Triangle(me.getX(), me.getY(), 0, 0);
+                    pp.setDrawTriangle(drawTriangle);
+                    pp.repaint();
+                }
+                if ("arc".equals(whatDraw)) {
+                    drawArc = pp.getDrawArc();
+                    drawArc = new Arc(me.getX(), me.getY(),me.getX(), me.getY());
+                    pp.setDrawArc(drawArc);
+                    pp.repaint();
+                }
+                if ("line".equals(whatDraw)) {
+                    drawLine = pp.getDrawLine();
+                    drawLine = new Line(me.getX(), me.getY(),me.getX(), me.getY());
+                    pp.setDrawLine(drawLine);
                     pp.repaint();
                 }
 
@@ -46,8 +70,17 @@ public class Paint extends javax.swing.JFrame {
 
             @Override
             public void mouseReleased(MouseEvent me) {
-                    if ("square".equals(whatDraw)) {
-                   // pp.addSquare(drawSquare);
+                if ("square".equals(whatDraw)) {
+                    pp.addObject(whatDraw, drawSquare);
+                }
+                if ("rhomb".equals(whatDraw)) {
+                    pp.addObject(whatDraw, drawRhomb);
+                }
+                if ("triangle".equals(whatDraw)) {
+                    pp.addObject(whatDraw, drawTriangle);
+                }
+                if ("arc".equals(whatDraw)) {
+                    pp.addObject(whatDraw, drawArc);
                 }
             }
 
@@ -80,6 +113,26 @@ public class Paint extends javax.swing.JFrame {
                     pp.setDrawSquare(drawSquare);
                     pp.repaint();
                 }
+                if ("triangle".equals(whatDraw)) {
+                    tmpx = me.getX() - drawTriangle.getX();
+                    tmpy = me.getY() - drawTriangle.getY();
+                    drawTriangle.setHeight(tmpy);
+                    drawTriangle.setWidth(tmpx);
+                    pp.setDrawTriangle(drawTriangle);
+                    pp.repaint();
+                }
+                if ("arc".equals(whatDraw)) {
+                    drawArc.setxEnd(me.getX());
+                    drawArc.setyEnd(me.getY());
+                    pp.setDrawArc(drawArc);
+                    pp.repaint();
+                }
+                if ("line".equals(whatDraw)) {
+                    drawLine.setxEnd(me.getX());
+                    drawLine.setyEnd(me.getY());
+                    pp.setDrawLine(drawLine);
+                    pp.repaint();
+                }
             }
 
             @Override
@@ -93,6 +146,7 @@ public class Paint extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -111,6 +165,7 @@ public class Paint extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
         jLabel1.setText("Kształty");
 
+        buttonGroup1.add(jToggleButton1);
         jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/arrow.png"))); // NOI18N
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +173,7 @@ public class Paint extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jToggleButton2);
         jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/line.png"))); // NOI18N
         jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +181,7 @@ public class Paint extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jToggleButton3);
         jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/rhomb.png"))); // NOI18N
         jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,8 +189,10 @@ public class Paint extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jToggleButton4);
         jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/circle.png"))); // NOI18N
 
+        buttonGroup1.add(jToggleButton5);
         jToggleButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/triangle.png"))); // NOI18N
         jToggleButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,6 +200,7 @@ public class Paint extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jToggleButton6);
         jToggleButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/square.png"))); // NOI18N
         jToggleButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -264,6 +324,7 @@ public class Paint extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
