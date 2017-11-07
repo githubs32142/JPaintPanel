@@ -5,20 +5,26 @@
  */
 package edu.Class.Figure;
 
-import edu.Interface.IChechSquare;
+import edu.Interface.Figure;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import edu.Interface.ICheckFill;
 
+public class Rectangle implements Figure {
 
-public class Rectangle { 
-    private double width,height;
+    private double width, height;
     private double x, y;
     private boolean fill;
+    private Color colorFill;
+    private Color colorBorder;
 
-    public Rectangle(double x, double y,double width,double height) {
-        this.width = width;
-        this.x = x;
-        this.y = y;
-        this.height=height;
+    private Rectangle(Rectangle.Builder b) {
+        this.colorBorder = b.colorBorder;
+        this.colorFill = b.colorFill;
+        this.width = b.width;
+        this.x = b.x;
+        this.y = b.y;
+
     }
 
     public double getX() {
@@ -60,21 +66,101 @@ public class Rectangle {
     public void setFill(boolean fill) {
         this.fill = fill;
     }
-        public void paintRectangle(Graphics2D g2){
-        java.awt.Rectangle r= new java.awt.Rectangle((int)getX(), (int)getY(),(int)width, (int)height);
-        IChechSquare s;
+
+    public Color getColorFill() {
+        return colorFill;
+    }
+
+    public void setColorFill(Color colorFill) {
+        this.colorFill = colorFill;
+    }
+
+    public Color getColorBorder() {
+        return colorBorder;
+    }
+
+    public void setColorBorder(Color colorBorder) {
+        this.colorBorder = colorBorder;
+    }
+
+    @Override
+    public boolean contains(double x, double y) {
+        java.awt.Rectangle r = new java.awt.Rectangle((int) getX(), (int) getY(), (int) width, (int) height);
+        return r.contains(x, y);
+    }
+
+    @Override
+    public void paint(Graphics2D g2) {
+        java.awt.Rectangle r = new java.awt.Rectangle((int) getX(), (int) getY(), (int) width, (int) height);
+        ICheckFill s;
         s = (boolean b) -> {
-            if(b){
+            if (!b) {
+                Color col = g2.getColor();
+                g2.setColor(colorBorder);
                 g2.draw(r);
-            }
-            else{
+                g2.setColor(col);
+            } else {
+                Color col = g2.getColor();
+                g2.setColor(colorBorder);
+                g2.draw(r);
+                g2.setColor(colorFill);
                 g2.fill(r);
+                g2.setColor(col);
             }
         };
-        s.ifsquare(fill);
+        s.ifFill(fill);
     }
-    public boolean contains(double x, double y){
-        java.awt.Rectangle r= new java.awt.Rectangle((int)getX(), (int)getY(),(int)width, (int)height);
-        return r.contains(x, y);
+
+    @Override
+    public void setXY(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public static class Builder {
+
+        private double x, y, width, height;
+        private boolean fill;
+        private Color colorFill;
+        private Color colorBorder;
+
+        public Builder setX(double x) {
+            Builder.this.x = x;
+            return this;
+        }
+
+        public Builder setY(double y) {
+            Builder.this.y = y;
+            return this;
+        }
+
+        public Builder setWidth(double width) {
+            Builder.this.width = width;
+            return this;
+        }
+
+        public Builder setHeight(double height) {
+            Builder.this.height = height;
+            return this;
+        }
+
+        public Builder setColorFill(Color c) {
+            Builder.this.colorFill = c;
+            return this;
+        }
+
+        public Builder setColorBorder(Color c) {
+            Builder.this.colorBorder = c;
+            return this;
+        }
+
+        public Builder setFill(boolean b) {
+            Builder.this.fill = b;
+            return this;
+        }
+
+        public Rectangle bulid() {
+            return new Rectangle(this);
+        }
     }
 }

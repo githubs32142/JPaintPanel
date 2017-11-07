@@ -4,21 +4,28 @@
  * and open the template in the editor.
  */
 package edu.Class.Figure;
+
 import edu.Interface.Figure;
-import edu.Interface.IChechSquare;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.Serializable;
+import edu.Interface.ICheckFill;
 
-public class Square implements Serializable,Figure {
+public class Square implements Serializable, Figure {
 
     private double width;
     private double x, y;
     private boolean fill;
-    public Square( double x, double y,double width) {
-        this.width = width;
-        this.x = x;
-        this.y = y;
+    private Color colorFill;
+    private Color colorBorder;
+
+     private Square(Square.BuilderSquare b){
+        this.colorBorder=b.colorBorder;
+        this.colorFill= b.colorFill;
+        this.width= b.width;
+        setXY(b.x, b.y);
+        
     }
 
     public double getX() {
@@ -58,27 +65,90 @@ public class Square implements Serializable,Figure {
     public void setFill(boolean fill) {
         this.fill = fill;
     }
-    
+
+    public Color getColorFill() {
+        return colorFill;
+    }
+
+    public void setColorFill(Color colorFill) {
+        this.colorFill = colorFill;
+    }
+
+    public Color getColorBorder() {
+        return colorBorder;
+    }
+
+    public void setColorBorder(Color colorBorder) {
+        this.colorBorder = colorBorder;
+    }
+
     @Override
-    public void paint(Graphics2D g2){
-        Rectangle r= new Rectangle((int)getX(), (int)getY(),(int)width, (int)width);
-        IChechSquare s;
+    public void paint(Graphics2D g2) {
+        Rectangle r = new Rectangle((int) getX(), (int) getY(), (int) width, (int) width);
+        ICheckFill s;
         s = (boolean b) -> {
-            if(!b){
+            if (!b) {
+                Color col = g2.getColor();
+                g2.setColor(colorBorder);
                 g2.draw(r);
-            }
-            else{
+                g2.setColor(col);
+            } else {
+                Color col = g2.getColor();
+                g2.setColor(colorBorder);
+                g2.draw(r);
+                g2.setColor(colorFill);
                 g2.fill(r);
+                g2.setColor(col);
             }
         };
-        s.ifsquare(fill);
+        s.ifFill(fill);
     }
-    
+
     @Override
-    public boolean contains(double x, double y){
-        Rectangle r= new Rectangle((int)getX(), (int)getY(),(int)width, (int)width);
+    public boolean contains(double x, double y) {
+        Rectangle r = new Rectangle((int) getX(), (int) getY(), (int) width, (int) width);
         return r.contains(x, y);
     }
+    
+    public static class BuilderSquare {
+
+        private double x, y, width;
+        private boolean fill;
+        private Color colorFill;
+        private Color colorBorder;
+
+        public BuilderSquare setX(double x) {
+            BuilderSquare.this.x = x;
+            return this;
+        }
+
+        public BuilderSquare setY(double y) {
+            BuilderSquare.this.y = y;
+            return this;
+        }
+
+        public BuilderSquare setWidth(double width) {
+            BuilderSquare.this.width = width;
+            return this;
+        }
 
 
+        public BuilderSquare setColorFill(Color c) {
+            BuilderSquare.this.colorFill = c;
+            return this;
+        }
+
+        public BuilderSquare setColorBorder(Color c) {
+            BuilderSquare.this.colorBorder = c;
+            return this;
+        }
+
+        public BuilderSquare setFill(boolean b) {
+            BuilderSquare.this.fill = b;
+            return this;
+        }
+        public Square bulid(){
+            return new Square(this);
+        }
+    }
 }

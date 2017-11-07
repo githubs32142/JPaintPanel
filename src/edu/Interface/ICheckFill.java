@@ -9,6 +9,6 @@ package edu.Interface;
  *
  * @author Admin
  */
-public interface IChechSquare {
-    public void ifsquare(boolean b);
+public interface ICheckFill {
+    public void ifFill(boolean b);
 }

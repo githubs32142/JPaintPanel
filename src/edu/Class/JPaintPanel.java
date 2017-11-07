@@ -12,13 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import edu.Interface.ContainsSquare;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.function.Consumer;
+import javax.imageio.ImageIO;
 
 public class JPaintPanel extends JPanel {
 
-    private Square drawSquare = new Square(0, 0, 0);
-    private Triangle drawTriangle = new Triangle(0, 0, 0, 0);
-    private Rhomb drawRhomb = new Rhomb(0, 0, 0, 0);
+    private Square drawSquare;
+    private Triangle drawTriangle;
+    private Rhomb drawRhomb;
     private Line drawLine = new Line(0, 0, 0, 0);
     private Arc drawArc = new Arc(0, 0, 0, 0);
     List<Square> square = new ArrayList<>();
@@ -26,6 +30,7 @@ public class JPaintPanel extends JPanel {
     List<Line> lines = new ArrayList<>();
     List<Arc> arcs = new ArrayList<>();
     List<Rhomb> rhombs = new ArrayList<>();
+    private BufferedImage paintImage;
 
     /**
      ** Metoda, która odmalowywuje komponent
@@ -39,6 +44,9 @@ public class JPaintPanel extends JPanel {
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2D.setRenderingHints(rh);
+        if (imageIsNull()) {
+            g2D.drawImage(paintImage, 0, 0, null);
+        }
         square.stream().forEach((square1) -> {
             square1.paint(g2D);
         });
@@ -54,46 +62,45 @@ public class JPaintPanel extends JPanel {
         rhombs.forEach((t) -> {
             t.paint(g2D);
         });
-        if (drawSquare != null) {
+        if (squareIsNotNull()) {
             drawSquare.paint(g2D);
         }
-        if (drawTriangle != null) {
+        if (triangleIsNotNull()) {
             drawTriangle.paint(g2D);
         }
-        if (drawRhomb != null) {
+        if (rhombIsNotNull()) {
             drawRhomb.paint(g2D);
         }
-        if(drawLine!= null){
+        if (lineIsNotNull()) {
             drawLine.paint(g2D);
         }
-        if(drawArc!= null){
+        if (arcIsNotNull()) {
             drawArc.paint(g2D);
         }
-
     }
 
-    /**
-     ** Metoda, która dodaje kwasrat
-     *
-     * @param x -współrzędna x
-     * @param y - współrzędna y
-     * @param width - szerokość
-     */
-    public void addSquare(double x, double y, double width) {
-        square.add(new Square(width, x, y));
+    private boolean arcIsNotNull() {
+        return drawArc != null;
     }
 
-    /**
-     ** Metoda, która dodaje kwadrat
-     *
-     * @param x - współrzędna x
-     * @param y - współrzędna y
-     * @param width - szerokość
-     * @param fill - wypełnienie
-     */
-    public void addSquare(double x, double y, double width, boolean fill) {
-        square.add(new Square(width, x, y));
-        square.get(square.size() - 1).setFill(fill);
+    private boolean lineIsNotNull() {
+        return drawLine != null;
+    }
+
+    private boolean rhombIsNotNull() {
+        return drawRhomb != null;
+    }
+
+    private boolean triangleIsNotNull() {
+        return drawTriangle != null;
+    }
+
+    private boolean squareIsNotNull() {
+        return drawSquare != null;
+    }
+
+    private boolean imageIsNull() {
+        return paintImage != null;
     }
 
     /**
@@ -103,32 +110,6 @@ public class JPaintPanel extends JPanel {
      */
     private void addSquare(Square s) {
         square.add(s);
-    }
-
-    /**
-     ** Metoda, która dodaje trójkąt
-     *
-     * @param x - współrzędna x
-     * @param y - współrzędna y
-     * @param weight - szerokość
-     * @param height - wysokość
-     */
-    public void addTrinagle(double x, double y, double weight, double height) {
-        triangles.add(new Triangle(x, y, weight, height));
-    }
-
-    /**
-     ** Metoda, która dodaje trójkąt
-     *
-     * @param x - współrzędna x
-     * @param y - współrzędna y
-     * @param width - szerokość
-     * @param height - wysokość
-     * @param fill wypełnienie
-     */
-    public void addTrinagle(double x, double y, double width, double height, boolean fill) {
-        triangles.add(new Triangle(x, y, width, height));
-        triangles.get(triangles.size() - 1).setFill(fill);
     }
 
     /**
@@ -169,7 +150,7 @@ public class JPaintPanel extends JPanel {
      * @param fill ustawienia wypełnienia
      */
     public void setFillSquare(int i, boolean fill) {
-        if (i >= 0 && i < square.size()) {
+        if (containsInSquare(i) && i < square.size()) {
             square.get(i).setFill(fill);
         }
     }
@@ -256,16 +237,19 @@ public class JPaintPanel extends JPanel {
     public void setDrawArc(Arc drawArc) {
         this.drawArc = drawArc;
     }
-    
 
     public WhatClicked whatFigureClicked(double x, double y) {
         int tmp = returnIndexSquare(x, y);
         WhatClicked wC = new WhatClicked(-1, "");
-        if (tmp >= 0) {
+        if (containsInSquare(tmp)) {
             wC.setId(tmp);
             wC.setType("square");
         }
         return wC;
+    }
+
+    private static boolean containsInSquare(int tmp) {
+        return tmp >= 0;
     }
 
     /**
@@ -291,5 +275,11 @@ public class JPaintPanel extends JPanel {
             addLines((Line) t);
         }
 
+    }
+
+    public void loadImage(File file) throws IOException {
+        paintImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        paintImage = ImageIO.read(file);
+        repaint();
     }
 }

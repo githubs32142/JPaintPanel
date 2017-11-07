@@ -7,6 +7,7 @@ import edu.Class.JPaintPanel;
 import edu.Class.Figure.Square;
 import edu.Class.Figure.Triangle;
 import edu.Class.WhatClicked;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,9 +15,9 @@ import java.awt.event.MouseMotionListener;
 public class Paint extends javax.swing.JFrame {
 
     JPaintPanel pp = new JPaintPanel();
-    private Rhomb drawRhomb = new Rhomb(0, 0, 0, 0);
-    private Square drawSquare = new Square(0, 0, 0);
-    private Triangle drawTriangle = new Triangle(0, 0, 0, 0);
+    private Rhomb drawRhomb;
+    private Square drawSquare;
+    private Triangle drawTriangle;
     private Arc drawArc = new Arc(0, 0, 0, 0);
     private Line drawLine = new Line(0, 0, 0, 0);
     String whatDraw = "";
@@ -35,33 +36,56 @@ public class Paint extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent me) {
-                if ("rhomb".equals(whatDraw)) {
+                if (choiseRhomb()) {
                     drawRhomb = pp.getDrawRhomb();
-                    drawRhomb = new Rhomb(me.getX(), me.getY(), 0, 0);
+                    drawRhomb = new Rhomb.Builder()
+                            .setX(me.getX())
+                            .setY(me.getY())
+                            .setHeight(0)
+                            .setWidth(0.0)
+                            .setFill(Boolean.FALSE)
+                            .setColorBorder(Color.black)
+                            .setColorFill(Color.red)
+                            .bulid();
                     pp.setDrawRhomb(drawRhomb);
                     pp.repaint();
                 }
-                if ("square".equals(whatDraw)) {
+                if (choiseSquare()) {
                     drawSquare = pp.getDrawSquare();
-                    drawSquare = new Square(me.getX(), me.getY(), 0);
+                    drawSquare = new Square.BuilderSquare()
+                            .setX(me.getX())
+                            .setY(me.getY())
+                            .setWidth(0.0)
+                            .setFill(Boolean.FALSE)
+                            .setColorBorder(Color.black)
+                            .setColorFill(Color.red)
+                            .bulid();
                     pp.setDrawSquare(drawSquare);
                     pp.repaint();
                 }
-                if ("triangle".equals(whatDraw)) {
+                if (choiseTriangle()) {
                     drawTriangle = pp.getDrawTriangle();
-                    drawTriangle = new Triangle(me.getX(), me.getY(), 0, 0);
+                    drawTriangle = new Triangle.BuilderTriangle()
+                            .setX(me.getX())
+                            .setY(me.getY())
+                            .setHeight(0)
+                            .setWidth(0.0)
+                            .setFill(Boolean.FALSE)
+                            .setColorBorder(Color.black)
+                            .setColorFill(Color.red)
+                            .bulid();
                     pp.setDrawTriangle(drawTriangle);
                     pp.repaint();
                 }
-                if ("arc".equals(whatDraw)) {
+                if (choiseArc()) {
                     drawArc = pp.getDrawArc();
-                    drawArc = new Arc(me.getX(), me.getY(),me.getX(), me.getY());
+                    drawArc = new Arc(me.getX(), me.getY(), me.getX(), me.getY());
                     pp.setDrawArc(drawArc);
                     pp.repaint();
                 }
-                if ("line".equals(whatDraw)) {
+                if (choiseLine()) {
                     drawLine = pp.getDrawLine();
-                    drawLine = new Line(me.getX(), me.getY(),me.getX(), me.getY());
+                    drawLine = new Line(me.getX(), me.getY(), me.getX(), me.getY());
                     pp.setDrawLine(drawLine);
                     pp.repaint();
                 }
@@ -70,16 +94,16 @@ public class Paint extends javax.swing.JFrame {
 
             @Override
             public void mouseReleased(MouseEvent me) {
-                if ("square".equals(whatDraw)) {
+                if (choiseSquare()) {
                     pp.addObject(whatDraw, drawSquare);
                 }
-                if ("rhomb".equals(whatDraw)) {
+                if (choiseRhomb()) {
                     pp.addObject(whatDraw, drawRhomb);
                 }
-                if ("triangle".equals(whatDraw)) {
+                if (choiseTriangle()) {
                     pp.addObject(whatDraw, drawTriangle);
                 }
-                if ("arc".equals(whatDraw)) {
+                if (choiseArc()) {
                     pp.addObject(whatDraw, drawArc);
                 }
             }
@@ -99,7 +123,7 @@ public class Paint extends javax.swing.JFrame {
             public void mouseDragged(MouseEvent me) {
                 double tmpx = 0.0;
                 double tmpy = 0.0;
-                if ("rhomb".equals(whatDraw)) {
+                if (choiseRhomb()) {
                     tmpx = me.getX() - drawRhomb.getX();
                     tmpy = me.getY() - drawRhomb.getY();
                     drawRhomb.setWidth(tmpx);
@@ -107,13 +131,13 @@ public class Paint extends javax.swing.JFrame {
                     pp.setDrawRhomb(drawRhomb);
                     pp.repaint();
                 }
-                if ("square".equals(whatDraw)) {
+                if (choiseSquare()) {
                     tmpy = me.getY() - drawSquare.getY();
                     drawSquare.setWidth(tmpy);
                     pp.setDrawSquare(drawSquare);
                     pp.repaint();
                 }
-                if ("triangle".equals(whatDraw)) {
+                if (choiseTriangle()) {
                     tmpx = me.getX() - drawTriangle.getX();
                     tmpy = me.getY() - drawTriangle.getY();
                     drawTriangle.setHeight(tmpy);
@@ -121,13 +145,13 @@ public class Paint extends javax.swing.JFrame {
                     pp.setDrawTriangle(drawTriangle);
                     pp.repaint();
                 }
-                if ("arc".equals(whatDraw)) {
+                if (choiseArc()) {
                     drawArc.setxEnd(me.getX());
                     drawArc.setyEnd(me.getY());
                     pp.setDrawArc(drawArc);
                     pp.repaint();
                 }
-                if ("line".equals(whatDraw)) {
+                if (choiseLine()) {
                     drawLine.setxEnd(me.getX());
                     drawLine.setyEnd(me.getY());
                     pp.setDrawLine(drawLine);
@@ -140,6 +164,26 @@ public class Paint extends javax.swing.JFrame {
 
             }
         });
+    }
+
+    private boolean choiseLine() {
+        return "line".equals(whatDraw);
+    }
+
+    private boolean choiseArc() {
+        return "arc".equals(whatDraw);
+    }
+
+    private boolean choiseTriangle() {
+        return "triangle".equals(whatDraw);
+    }
+
+    private boolean choiseSquare() {
+        return "square".equals(whatDraw);
+    }
+
+    private boolean choiseRhomb() {
+        return "rhomb".equals(whatDraw);
     }
 
     @SuppressWarnings("unchecked")

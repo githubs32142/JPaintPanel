@@ -6,14 +6,14 @@
 package edu.Class.Figure;
 
 import edu.Interface.Figure;
-import edu.Interface.IChechSquare;
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import edu.Interface.ICheckFill;
 
 public class Triangle implements Serializable, Figure {
 
@@ -22,17 +22,14 @@ public class Triangle implements Serializable, Figure {
     private List<Point> points = new ArrayList();
     private Color colorFill;
     private Color colorBorder;
-    
 
-    public Triangle(double x, double y, double weight, double height) {
-        this.x = x;
-        this.y = y;
-        this.width = weight;
-        this.height = height;
-        fill = true;
-        points.add(new Point((int) x, (int) y));
-        points.add(new Point((int) (x + (this.width / 2)), (int) (y + height)));
-        points.add(new Point((int) ((x + this.width)), (int) (y)));
+    private Triangle(Triangle.BuilderTriangle b){
+        this.colorBorder=b.colorBorder;
+        this.colorFill= b.colorFill;
+        this.height= b.height;
+        this.width= b.width;
+        setXY(b.x, b.y);
+        
     }
 
     public double getX() {
@@ -100,15 +97,23 @@ public class Triangle implements Serializable, Figure {
         p.addPoint(points.get(0).x, points.get(0).y);
         p.addPoint(points.get(1).x, points.get(1).y);
         p.addPoint(points.get(2).x, points.get(2).y);
-        IChechSquare s;
+        ICheckFill s;
         s = (boolean b) -> {
-            if (b) {
+            if (!b) {
+                Color col= g2.getColor();
+                g2.setColor(colorBorder);
                 g2.draw(p);
+                g2.setColor(col);
             } else {
+                Color col= g2.getColor();
+                g2.setColor(colorBorder);
+                g2.draw(p);
+                g2.setColor(colorFill);
                 g2.fill(p);
+                g2.setColor(col);
             }
         };
-        s.ifsquare(fill);
+        s.ifFill(fill);
     }
 
     @Override
@@ -133,5 +138,50 @@ public class Triangle implements Serializable, Figure {
         points.add(new Point((int) x, (int) (y + height)));
         points.add(new Point((int) ((x + this.width)), (int) (y + height)));
     }
-    
+
+    public static class BuilderTriangle {
+
+        private double x, y, width, height;
+        private boolean fill;
+        private Color colorFill;
+        private Color colorBorder;
+
+        public BuilderTriangle setX(double x) {
+            BuilderTriangle.this.x = x;
+            return this;
+        }
+
+        public BuilderTriangle setY(double y) {
+            BuilderTriangle.this.y = y;
+            return this;
+        }
+
+        public BuilderTriangle setWidth(double width) {
+            BuilderTriangle.this.width = width;
+            return this;
+        }
+
+        public BuilderTriangle setHeight(double height) {
+            BuilderTriangle.this.height = height;
+            return this;
+        }
+
+        public BuilderTriangle setColorFill(Color c) {
+            BuilderTriangle.this.colorFill = c;
+            return this;
+        }
+
+        public BuilderTriangle setColorBorder(Color c) {
+            BuilderTriangle.this.colorBorder = c;
+            return this;
+        }
+
+        public BuilderTriangle setFill(boolean b) {
+            BuilderTriangle.this.fill = b;
+            return this;
+        }
+        public Triangle bulid(){
+            return new Triangle(this);
+        }
+    }
 }

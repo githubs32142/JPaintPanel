@@ -6,40 +6,29 @@
 package edu.Class.Figure;
 
 import edu.Interface.Figure;
-import edu.Interface.IChechSquare;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import edu.Interface.ICheckFill;
 
 public class Rhomb implements Serializable, Figure {
 
     private double x, y, width, height;
     private boolean fill;
     List<Point> points = new ArrayList();
+    private Color colorFill;
+    private Color colorBorder;
 
-    public Rhomb() {
-    }
+    private Rhomb(Rhomb.Builder b) {
+        this.colorBorder = b.colorBorder;
+        this.colorFill = b.colorFill;
+        this.width = b.width;
+        setXY(b.x, b.y);
 
-    public Rhomb(double x, double y, double width, double height) {
-        double b;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.fill = false;
-        points.add(new Point((int) (x), (int) (y + height)));
-        try {//tg(60) = sqrt(3)
-            b = this.height / Math.sqrt(3);
-        } catch (Exception ex) {
-            b = 1;
-        }
-        points.add(new Point((int) (x + b), (int) (y)));
-        points.add(new Point((int) (x + b + width), (int) (y)));
-        points.add(new Point((int) (x - b + width), (int) (y + height)));
-        
     }
 
     public double getX() {
@@ -64,7 +53,7 @@ public class Rhomb implements Serializable, Figure {
 
     public void setWidth(double width) {
         this.width = width;
-        setXY(this.x,this.y);
+        setXY(this.x, this.y);
     }
 
     public double getHeight() {
@@ -73,7 +62,7 @@ public class Rhomb implements Serializable, Figure {
 
     public void setHeight(double height) {
         this.height = height;
-        setXY(this.x,this.y);
+        setXY(this.x, this.y);
     }
 
     public boolean isFill() {
@@ -84,6 +73,22 @@ public class Rhomb implements Serializable, Figure {
         this.fill = fill;
     }
 
+    public Color getColorFill() {
+        return colorFill;
+    }
+
+    public void setColorFill(Color colorFill) {
+        this.colorFill = colorFill;
+    }
+
+    public Color getColorBorder() {
+        return colorBorder;
+    }
+
+    public void setColorBorder(Color colorBorder) {
+        this.colorBorder = colorBorder;
+    }
+
     @Override
     public void paint(Graphics2D g2) {
         Polygon p = new Polygon();
@@ -91,20 +96,33 @@ public class Rhomb implements Serializable, Figure {
         p.addPoint(points.get(1).x, points.get(1).y);
         p.addPoint(points.get(2).x, points.get(2).y);
         p.addPoint(points.get(3).x, points.get(3).y);
-        IChechSquare s;
+        ICheckFill s;
         s = (boolean b) -> {
-            if (b) {
+            if (!b) {
+                Color col = g2.getColor();
+                g2.setColor(colorBorder);
                 g2.draw(p);
+                g2.setColor(col);
             } else {
+                Color col = g2.getColor();
+                g2.setColor(colorBorder);
+                g2.draw(p);
+                g2.setColor(colorFill);
                 g2.fill(p);
+                g2.setColor(col);
             }
         };
-        s.ifsquare(fill);
+        s.ifFill(fill);
     }
 
     @Override
     public boolean contains(double x, double y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Polygon p = new Polygon();
+        p.addPoint(points.get(0).x, points.get(0).y);
+        p.addPoint(points.get(1).x, points.get(1).y);
+        p.addPoint(points.get(2).x, points.get(2).y);
+        p.addPoint(points.get(3).x, points.get(3).y);
+        return p.contains(x, y);
     }
 
     @Override
@@ -117,13 +135,59 @@ public class Rhomb implements Serializable, Figure {
         points.add(new Point((int) (x), (int) (y + height)));
         try {//tg(60) = sqrt(3)
             b = this.height / Math.sqrt(3);
-           // System.out.println(b);
+            // System.out.println(b);
         } catch (Exception ex) {
             b = 1;
         }
         points.add(new Point((int) (x + b), (int) (y)));
         points.add(new Point((int) (x + b + width), (int) (y)));
-        points.add(new Point((int) (x  + width), (int) (y + height)));
+        points.add(new Point((int) (x + width), (int) (y + height)));
     }
 
+    public static class Builder {
+
+        private double x, y, width, height;
+        private boolean fill;
+        private Color colorFill;
+        private Color colorBorder;
+
+        public Builder setX(double x) {
+            Builder.this.x = x;
+            return this;
+        }
+
+        public Builder setY(double y) {
+            Builder.this.y = y;
+            return this;
+        }
+
+        public Builder setWidth(double width) {
+            Builder.this.width = width;
+            return this;
+        }
+
+        public Builder setHeight(double height) {
+            Builder.this.height = height;
+            return this;
+        }
+
+        public Builder setColorFill(Color c) {
+            Builder.this.colorFill = c;
+            return this;
+        }
+
+        public Builder setColorBorder(Color c) {
+            Builder.this.colorBorder = c;
+            return this;
+        }
+
+        public Builder setFill(boolean b) {
+            Builder.this.fill = b;
+            return this;
+        }
+
+        public Rhomb bulid() {
+            return new Rhomb(this);
+        }
+    }
 }
