@@ -19,13 +19,15 @@ public class Square implements Serializable, Figure {
     private boolean fill;
     private Color colorFill;
     private Color colorBorder;
+    private int id;
 
-     private Square(Square.BuilderSquare b){
-        this.colorBorder=b.colorBorder;
-        this.colorFill= b.colorFill;
-        this.width= b.width;
+    private Square(Square.BuilderSquare b) {
+        this.colorBorder = b.colorBorder;
+        this.colorFill = b.colorFill;
+        this.width = b.width;
+        this.fill=b.fill;
         setXY(b.x, b.y);
-        
+
     }
 
     public double getX() {
@@ -82,6 +84,14 @@ public class Square implements Serializable, Figure {
         this.colorBorder = colorBorder;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public void paint(Graphics2D g2) {
         Rectangle r = new Rectangle((int) getX(), (int) getY(), (int) width, (int) width);
@@ -109,7 +119,7 @@ public class Square implements Serializable, Figure {
         Rectangle r = new Rectangle((int) getX(), (int) getY(), (int) width, (int) width);
         return r.contains(x, y);
     }
-    
+
     public static class BuilderSquare {
 
         private double x, y, width;
@@ -132,7 +142,6 @@ public class Square implements Serializable, Figure {
             return this;
         }
 
-
         public BuilderSquare setColorFill(Color c) {
             BuilderSquare.this.colorFill = c;
             return this;
@@ -147,7 +156,8 @@ public class Square implements Serializable, Figure {
             BuilderSquare.this.fill = b;
             return this;
         }
-        public Square bulid(){
+
+        public Square bulid() {
             return new Square(this);
         }
     }

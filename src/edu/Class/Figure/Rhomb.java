@@ -22,11 +22,14 @@ public class Rhomb implements Serializable, Figure {
     List<Point> points = new ArrayList();
     private Color colorFill;
     private Color colorBorder;
+    private int id;
 
-    private Rhomb(Rhomb.Builder b) {
+    private Rhomb(Rhomb.BuilderRhomb b) {
         this.colorBorder = b.colorBorder;
         this.colorFill = b.colorFill;
         this.width = b.width;
+        this.height=b.height;
+        this.fill = b.fill;
         setXY(b.x, b.y);
 
     }
@@ -103,13 +106,15 @@ public class Rhomb implements Serializable, Figure {
                 g2.setColor(colorBorder);
                 g2.draw(p);
                 g2.setColor(col);
+                //   System.out.println("dddd");
             } else {
-                Color col = g2.getColor();
-                g2.setColor(colorBorder);
-                g2.draw(p);
-                g2.setColor(colorFill);
+               // Color col = g2.getColor();
+                ////g2.setColor(colorBorder);
+                //g2.draw(p);
+                //g2.setColor(colorFill);
                 g2.fill(p);
-                g2.setColor(col);
+               // g2.setColor(col);
+                System.out.println("tutaj");
             }
         };
         s.ifFill(fill);
@@ -130,7 +135,6 @@ public class Rhomb implements Serializable, Figure {
         double b;
         this.x = x;
         this.y = y;
-        this.fill = false;
         points.clear();
         points.add(new Point((int) (x), (int) (y + height)));
         try {//tg(60) = sqrt(3)
@@ -144,45 +148,45 @@ public class Rhomb implements Serializable, Figure {
         points.add(new Point((int) (x + width), (int) (y + height)));
     }
 
-    public static class Builder {
+    public static class BuilderRhomb {
 
         private double x, y, width, height;
         private boolean fill;
         private Color colorFill;
         private Color colorBorder;
 
-        public Builder setX(double x) {
-            Builder.this.x = x;
+        public BuilderRhomb setX(double x) {
+            BuilderRhomb.this.x = x;
             return this;
         }
 
-        public Builder setY(double y) {
-            Builder.this.y = y;
+        public BuilderRhomb setY(double y) {
+            BuilderRhomb.this.y = y;
             return this;
         }
 
-        public Builder setWidth(double width) {
-            Builder.this.width = width;
+        public BuilderRhomb setWidth(double width) {
+            BuilderRhomb.this.width = width;
             return this;
         }
 
-        public Builder setHeight(double height) {
-            Builder.this.height = height;
+        public BuilderRhomb setHeight(double height) {
+            BuilderRhomb.this.height = height;
             return this;
         }
 
-        public Builder setColorFill(Color c) {
-            Builder.this.colorFill = c;
+        public BuilderRhomb setColorFill(Color c) {
+            BuilderRhomb.this.colorFill = c;
             return this;
         }
 
-        public Builder setColorBorder(Color c) {
-            Builder.this.colorBorder = c;
+        public BuilderRhomb setColorBorder(Color c) {
+            BuilderRhomb.this.colorBorder = c;
             return this;
         }
 
-        public Builder setFill(boolean b) {
-            Builder.this.fill = b;
+        public BuilderRhomb setFill(boolean b) {
+            BuilderRhomb.this.fill = b;
             return this;
         }
 

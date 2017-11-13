@@ -6,7 +6,7 @@
 package edu.Class.Figure;
 
 import edu.Interface.Figure;
-import java.awt.Color; 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -22,14 +22,16 @@ public class Triangle implements Serializable, Figure {
     private List<Point> points = new ArrayList();
     private Color colorFill;
     private Color colorBorder;
+    private int id;
 
-    private Triangle(Triangle.BuilderTriangle b){
-        this.colorBorder=b.colorBorder;
-        this.colorFill= b.colorFill;
-        this.height= b.height;
-        this.width= b.width;
+    private Triangle(Triangle.BuilderTriangle b) {
+        this.colorBorder = b.colorBorder;
+        this.colorFill = b.colorFill;
+        this.height = b.height;
+        this.width = b.width;
+        this.fill=b.fill;
         setXY(b.x, b.y);
-        
+
     }
 
     public double getX() {
@@ -100,12 +102,12 @@ public class Triangle implements Serializable, Figure {
         ICheckFill s;
         s = (boolean b) -> {
             if (!b) {
-                Color col= g2.getColor();
+                Color col = g2.getColor();
                 g2.setColor(colorBorder);
                 g2.draw(p);
                 g2.setColor(col);
             } else {
-                Color col= g2.getColor();
+                Color col = g2.getColor();
                 g2.setColor(colorBorder);
                 g2.draw(p);
                 g2.setColor(colorFill);
@@ -180,7 +182,8 @@ public class Triangle implements Serializable, Figure {
             BuilderTriangle.this.fill = b;
             return this;
         }
-        public Triangle bulid(){
+
+        public Triangle bulid() {
             return new Triangle(this);
         }
     }

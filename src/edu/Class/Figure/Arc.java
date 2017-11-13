@@ -6,6 +6,7 @@
 package edu.Class.Figure;
 
 import edu.Interface.Figure;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
@@ -13,12 +14,15 @@ public class Arc implements Figure {
 
     private double xStart, yStart;
     private double xEnd, yEnd;
+    Color color;
+    private int id;
 
-    public Arc(double xStart, double yStart, double xEnd, double yEnd) {
-        this.xStart = xStart;
-        this.yStart = yStart;
-        this.xEnd = xEnd;
-        this.yEnd = yEnd;
+    private Arc(Arc.Builder b) {
+        xStart = b.xStart;
+        xEnd = b.xEnd;
+        yStart = b.yStart;
+        yEnd = b.yEnd;
+        color = b.color;
     }
 
     public double getxStart() {
@@ -53,12 +57,22 @@ public class Arc implements Figure {
         this.yEnd = yEnd;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public void paint(Graphics2D g2) {
+        Color c = g2.getColor();
+        g2.setColor(color);
         Line2D.Double l = new Line2D.Double(xStart, yStart, xEnd, yEnd);
         g2.draw(l);
         drawArc(g2);
-
+        g2.setColor(c);
     }
 
     @Override
@@ -76,6 +90,7 @@ public class Arc implements Figure {
     }
 
     private void drawArc(Graphics2D g2) {
+        Color c = g2.getColor();
         double arc = Math.atan2(this.getyEnd() - this.getyStart(), this.getxEnd() - this.getxStart());
         double x = this.getxEnd() - 15 * Math.cos(arc + Math.PI / 6);
         double y = this.getyEnd() - 15 * Math.sin(arc + Math.PI / 6);
@@ -83,5 +98,47 @@ public class Arc implements Figure {
         x = this.getxEnd() - 15 * Math.cos(arc - Math.PI / 6);
         y = this.getyEnd() - 15 * Math.sin(arc - Math.PI / 6);
         g2.draw(new Line2D.Double(this.getxEnd(), this.getyEnd(), x, y));
+    }
+
+    public static class Builder {
+
+        private double xStart, yStart;
+        private double xEnd, yEnd;
+        private boolean fill;
+        private Color color;
+
+        public Builder setXStart(double x) {
+            Builder.this.xStart = x;
+            return this;
+        }
+
+        public Builder setYStart(double y) {
+            Builder.this.yStart = y;
+            return this;
+        }
+
+        public Builder setXEnd(double xEnd) {
+            Builder.this.xEnd = xEnd;
+            return this;
+        }
+
+        public Builder setYEnd(double yEnd) {
+            Builder.this.yEnd = yEnd;
+            return this;
+        }
+
+        public Builder setColor(Color c) {
+            Builder.this.color = c;
+            return this;
+        }
+
+        public Builder setFill(boolean b) {
+            Builder.this.fill = b;
+            return this;
+        }
+
+        public Arc bulid() {
+            return new Arc(this);
+        }
     }
 }

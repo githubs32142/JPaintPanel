@@ -5,6 +5,7 @@ import edu.Class.Figure.Line;
 import edu.Class.Figure.Rhomb;
 import edu.Class.Figure.Triangle;
 import edu.Class.Figure.Square;
+import edu.Class.Figure.Wheel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -15,7 +16,6 @@ import edu.Interface.ContainsSquare;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 
 public class JPaintPanel extends JPanel {
@@ -23,13 +23,15 @@ public class JPaintPanel extends JPanel {
     private Square drawSquare;
     private Triangle drawTriangle;
     private Rhomb drawRhomb;
-    private Line drawLine = new Line(0, 0, 0, 0);
-    private Arc drawArc = new Arc(0, 0, 0, 0);
+    private Line drawLine;
+    private Wheel drawWheel;
+    private Arc drawArc;
     List<Square> square = new ArrayList<>();
     List<Triangle> triangles = new ArrayList<>();
     List<Line> lines = new ArrayList<>();
     List<Arc> arcs = new ArrayList<>();
     List<Rhomb> rhombs = new ArrayList<>();
+    List<Wheel> wheel = new ArrayList<>();
     private BufferedImage paintImage;
 
     /**
@@ -62,6 +64,9 @@ public class JPaintPanel extends JPanel {
         rhombs.forEach((t) -> {
             t.paint(g2D);
         });
+        wheel.forEach((Wheel t) -> {
+            t.paint(g2D);
+        });
         if (squareIsNotNull()) {
             drawSquare.paint(g2D);
         }
@@ -77,6 +82,17 @@ public class JPaintPanel extends JPanel {
         if (arcIsNotNull()) {
             drawArc.paint(g2D);
         }
+        if (wheelIsNull()) {
+            drawWheel.paint(g2D);
+        }
+    }
+
+    private boolean wheelIsNull() {
+        return drawWheel != null;
+    }
+
+    private void addWheel(Wheel w) {
+        wheel.add(w);
     }
 
     private boolean arcIsNotNull() {
@@ -259,22 +275,49 @@ public class JPaintPanel extends JPanel {
      * @param t obiekt
      */
     public void addObject(String typeObj, Object t) {
-        if ("square".equals(typeObj)) {
+        if (isSquareType(typeObj)) {
             addSquare((Square) t);
         }
-        if ("triangle".equals(typeObj)) {
+        if (isTriangleType(typeObj)) {
             addTrinagle((Triangle) t);
         }
-        if ("rhomb".equals(typeObj)) {
+        if (isRhombType(typeObj)) {
             addRhomb((Rhomb) t);
         }
-        if ("arc".equals(typeObj)) {
+        if (isArcType(typeObj)) {
             addArc((Arc) t);
         }
-        if ("line".equals(typeObj)) {
+        if (isLine(typeObj)) {
             addLines((Line) t);
         }
+        if (isWheelType(typeObj)) {
+            addWheel((Wheel) t);
+        }
 
+    }
+
+    private static boolean isWheelType(String typeObj) {
+        return "wheel".equals(typeObj);
+    }
+
+    private static boolean isLine(String typeObj) {
+        return "line".equals(typeObj);
+    }
+
+    private static boolean isArcType(String typeObj) {
+        return "arc".equals(typeObj);
+    }
+
+    private static boolean isRhombType(String typeObj) {
+        return "rhomb".equals(typeObj);
+    }
+
+    private static boolean isTriangleType(String typeObj) {
+        return "triangle".equals(typeObj);
+    }
+
+    private static boolean isSquareType(String typeObj) {
+        return "square".equals(typeObj);
     }
 
     public void loadImage(File file) throws IOException {
@@ -282,4 +325,13 @@ public class JPaintPanel extends JPanel {
         paintImage = ImageIO.read(file);
         repaint();
     }
+
+    public Wheel getDrawWheel() {
+        return drawWheel;
+    }
+
+    public void setDrawWheel(Wheel drawWheel) {
+        this.drawWheel = drawWheel;
+    }
+
 }

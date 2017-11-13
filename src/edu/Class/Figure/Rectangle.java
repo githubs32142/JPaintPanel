@@ -17,13 +17,14 @@ public class Rectangle implements Figure {
     private boolean fill;
     private Color colorFill;
     private Color colorBorder;
-
+private int id;
     private Rectangle(Rectangle.Builder b) {
         this.colorBorder = b.colorBorder;
         this.colorFill = b.colorFill;
         this.width = b.width;
         this.x = b.x;
         this.y = b.y;
+        this.fill=b.fill;
 
     }
 
@@ -81,6 +82,14 @@ public class Rectangle implements Figure {
 
     public void setColorBorder(Color colorBorder) {
         this.colorBorder = colorBorder;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
