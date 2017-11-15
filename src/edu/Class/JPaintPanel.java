@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import edu.Interface.ContainsSquare;
+import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,18 @@ public class JPaintPanel extends JPanel {
     List<Wheel> wheel = new ArrayList<>();
     private BufferedImage paintImage;
 
+    public void wipe(){
+        square.clear();
+        triangles.clear();
+        lines.clear();
+        arcs.clear();
+        rhombs.clear();
+        wheel.clear();
+    }
+    @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+    }
     /**
      ** Metoda, która odmalowywuje komponent
      *
