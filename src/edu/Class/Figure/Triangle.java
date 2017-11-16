@@ -29,7 +29,7 @@ public class Triangle implements Serializable, Figure {
         this.colorFill = b.colorFill;
         this.height = b.height;
         this.width = b.width;
-        this.fill=b.fill;
+        this.fill = b.fill;
         setXY(b.x, b.y);
 
     }
@@ -121,9 +121,9 @@ public class Triangle implements Serializable, Figure {
     @Override
     public boolean contains(double x, double y) {
         points.clear();
-        points.add(new Point((int) (x + (this.width / 2)), (int) (y)));
-        points.add(new Point((int) x, (int) (y + height)));
-        points.add(new Point((int) ((x + this.width)), (int) (y + height)));
+        points.add(new Point((int) this.x, (int) (this.y + height)));
+        points.add(new Point((int) (this.x + (this.width / 2)), (int) (this.y)));
+        points.add(new Point((int) ((this.x + this.width)), (int) (this.y + height)));
         Polygon p = new Polygon();
         p.addPoint(points.get(0).x, points.get(0).y);
         p.addPoint(points.get(1).x, points.get(1).y);

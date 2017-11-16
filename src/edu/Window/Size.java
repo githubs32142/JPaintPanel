@@ -158,6 +158,7 @@ public class Size extends javax.swing.JFrame {
         height = Integer.parseInt(jTextField2.getText());
         pp.setSize(width, height);
         pp.setBackground(color);
+        pp.wipe();
         this.dispose();
 
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -166,7 +167,7 @@ public class Size extends javax.swing.JFrame {
         Color newColor;
         newColor = JColorChooser.showDialog(
                 this,
-                "Choose Background Color", color);
+                "Wybbierz kolor tła", color);
         chColor.setBackground(newColor);
         color=newColor;
     }//GEN-LAST:event_choiseColorClicked

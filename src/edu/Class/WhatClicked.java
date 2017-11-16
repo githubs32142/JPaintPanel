@@ -24,13 +24,21 @@ public class WhatClicked {
     public void setId(int id) {
         this.id = id;
     }
-
+/**
+ ** Metoda, która zwraca figurę która została zaznaczona 
+ * @return typ figury
+ */
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "WhatClicked{" + "id=" + id + ", type=" + type + '}';
     }
     
 }

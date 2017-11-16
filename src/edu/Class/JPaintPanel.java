@@ -6,6 +6,7 @@ import edu.Class.Figure.Rhomb;
 import edu.Class.Figure.Triangle;
 import edu.Class.Figure.Square;
 import edu.Class.Figure.Wheel;
+import edu.Interface.Contains;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -13,10 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import edu.Interface.ContainsSquare;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Predicate;
 import javax.imageio.ImageIO;
 
 public class JPaintPanel extends JPanel {
@@ -35,18 +38,27 @@ public class JPaintPanel extends JPanel {
     List<Wheel> wheel = new ArrayList<>();
     private BufferedImage paintImage;
 
-    public void wipe(){
+    public void wipe() {
         square.clear();
         triangles.clear();
         lines.clear();
         arcs.clear();
         rhombs.clear();
         wheel.clear();
+        drawArc = null;
+        drawLine = null;
+        drawRhomb = null;
+        drawSquare = null;
+        drawTriangle = null;
+        drawWheel = null;
+        repaint();
     }
+
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
     }
+
     /**
      ** Metoda, która odmalowywuje komponent
      *
@@ -179,7 +191,7 @@ public class JPaintPanel extends JPanel {
      * @param fill ustawienia wypełnienia
      */
     public void setFillSquare(int i, boolean fill) {
-        if (containsInSquare(i) && i < square.size()) {
+        if (i >= 0 && i < square.size()) {
             square.get(i).setFill(fill);
         }
     }
@@ -213,7 +225,7 @@ public class JPaintPanel extends JPanel {
      * @param y współrzędna y
      * @return index trójkąta jeżeli >=0 . jeżeli -1 to nie zawiera się
      */
-    public int returnIndexdrawTriangle(double x, double y) {
+    private int returnIndexdrawTriangle(double x, double y) {
         edu.Interface.ContainsTriangle t = (List<Triangle> list, double x1, double y1) -> {
             for (int i = 0; i < list.size(); i++) {
                 Triangle s = (Triangle) list.get(i);
@@ -224,6 +236,92 @@ public class JPaintPanel extends JPanel {
             return -1;
         };
         return t.contains(triangles, x, y);
+    }
+
+    private int returnIndexLine(double x, double y) {
+        edu.Interface.Contains c = (Contains<Line>) (List<Line> list, double x1, double y1) -> {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).contains(x1, y1)) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        return c.contains(lines, x, y);
+    }
+
+    private int returnIndexArc(double x, double y) {
+        edu.Interface.Contains c = (Contains<Arc>) (List<Arc> list, double x1, double y1) -> {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).contains(x1, y1)) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        return c.contains(arcs, x, y);
+    }
+
+    private int returnIndexWheel(double x, double y) {
+        edu.Interface.Contains c = (Contains<Wheel>) (List<Wheel> list, double x1, double y1) -> {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).contains(x1, y1)) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        return c.contains(wheel, x, y);
+    }
+
+    private int returnIndexRhomb(double x, double y) {
+        edu.Interface.Contains c = (Contains<Rhomb>) (List<Rhomb> list, double x1, double y1) -> {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).contains(x1, y1)) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        return c.contains(rhombs, x, y);
+    }
+
+    public void changeColorBorder(WhatClicked wC, Color c) {
+        if (isLine(wC.getType())) {
+            setColorLine(wC.getId(), c);
+        }
+        if (isWheelType(wC.getType())) {
+            setColorBorderWheel(wC.getId(), c);
+        }
+        if (isArcType(wC.getType())) {
+            setColorArc(wC.getId(), c);
+        }
+        if (isRhombType(wC.getType())) {
+            setColorBorderRhomb(wC.getId(), c);
+        }
+        if (isSquareType(wC.getType())) {
+            setColorBorderSquare(wC.getId(), c);
+        }
+    }
+
+    private void setColorLine(int id, Color c) {
+        lines.get(id).setColor(c);
+    }
+
+    private void setColorBorderWheel(int id, Color c) {
+        wheel.get(id).setColorBorder(c);
+    }
+
+    private void setColorBorderRhomb(int id, Color c) {
+        rhombs.get(id).setColorBorder(c);
+    }
+
+    private void setColorBorderSquare(int id, Color c) {
+        rhombs.get(id).setColorBorder(c);
+    }
+
+    private void setColorArc(int id, Color c) {
+        arcs.get(id).setColor(c);
     }
 
     public Square getDrawSquare() {
@@ -268,17 +366,45 @@ public class JPaintPanel extends JPanel {
     }
 
     public WhatClicked whatFigureClicked(double x, double y) {
-        int tmp = returnIndexSquare(x, y);
+        int tmp = -1;
+        tmp = returnIndexSquare(x, y);
         WhatClicked wC = new WhatClicked(-1, "");
-        if (containsInSquare(tmp)) {
+        if (tmp >= 0) {
             wC.setId(tmp);
             wC.setType("square");
+            return wC;
+        }
+        tmp = returnIndexdrawTriangle(x, y);
+        if (tmp >= 0) {
+            wC.setId(tmp);
+            wC.setType("triangle");
+            return wC;
+        }
+        tmp = returnIndexLine(x, y);
+        if (tmp >= 0) {
+            wC.setId(tmp);
+            wC.setType("line");
+            return wC;
+        }
+        tmp = returnIndexArc(x, y);
+        if (tmp >= 0) {
+            wC.setId(tmp);
+            wC.setType("arc");
+            return wC;
+        }
+        tmp = returnIndexRhomb(x, y);
+        if (tmp >= 0) {
+            wC.setId(tmp);
+            wC.setType("rhomb");
+            return wC;
+        }
+        tmp = returnIndexWheel(x, y);
+        if (tmp >= 0) {
+            wC.setId(tmp);
+            wC.setType("wheel");
+            return wC;
         }
         return wC;
-    }
-
-    private static boolean containsInSquare(int tmp) {
-        return tmp >= 0;
     }
 
     /**

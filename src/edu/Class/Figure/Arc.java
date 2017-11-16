@@ -100,6 +100,14 @@ public class Arc implements Figure {
         g2.draw(new Line2D.Double(this.getxEnd(), this.getyEnd(), x, y));
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public static class Builder {
 
         private double xStart, yStart;

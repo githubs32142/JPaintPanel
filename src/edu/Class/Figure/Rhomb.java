@@ -108,13 +108,12 @@ public class Rhomb implements Serializable, Figure {
                 g2.setColor(col);
                 //   System.out.println("dddd");
             } else {
-               // Color col = g2.getColor();
-                ////g2.setColor(colorBorder);
-                //g2.draw(p);
-                //g2.setColor(colorFill);
+                Color col = g2.getColor();
+               g2.setColor(colorBorder);
+               g2.draw(p);
+               g2.setColor(colorFill);
                 g2.fill(p);
-               // g2.setColor(col);
-                System.out.println("tutaj");
+                g2.setColor(col);
             }
         };
         s.ifFill(fill);

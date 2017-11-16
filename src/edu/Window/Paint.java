@@ -15,7 +15,8 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JColorChooser;
 
 public class Paint extends javax.swing.JFrame {
-    int a=0, b=0;
+
+    int a = 0, b = 0;
     JPaintPanel pp = new JPaintPanel();
     private Rhomb drawRhomb;
     private Square drawSquare;
@@ -25,7 +26,8 @@ public class Paint extends javax.swing.JFrame {
     private Line drawLine;
     String whatDraw = "arc";
     private Color colorBorder = Color.BLACK;
-    private boolean fill=false;
+    private Color colorFill= Color.black;
+    private boolean fill = false;
     private WhatClicked wC = new WhatClicked();
 
     public Paint() {
@@ -36,7 +38,7 @@ public class Paint extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent me) {
                 wC = pp.whatFigureClicked(me.getX(), me.getY());
-                System.out.println(wC.getId());
+                System.out.println(wC.toString());
             }
 
             @Override
@@ -51,9 +53,9 @@ public class Paint extends javax.swing.JFrame {
                             .setWidth(0.0)
                             .setFill(fill)
                             .setColorBorder(colorBorder)
-                            .setColorFill(Color.red)
+                            .setColorFill(colorFill)
                             .bulid();
-                   // drawRhomb.setFill(fill);
+                    // drawRhomb.setFill(fill);
                     pp.setDrawRhomb(drawRhomb);
                     pp.repaint();
                 }
@@ -65,7 +67,7 @@ public class Paint extends javax.swing.JFrame {
                             .setWidth(0.0)
                             .setFill(fill)
                             .setColorBorder(colorBorder)
-                            .setColorFill(Color.red)
+                            .setColorFill(colorFill)
                             .bulid();
                     pp.setDrawSquare(drawSquare);
                     pp.repaint();
@@ -79,7 +81,7 @@ public class Paint extends javax.swing.JFrame {
                             .setWidth(0.0)
                             .setFill(fill)
                             .setColorBorder(colorBorder)
-                            .setColorFill(Color.red)
+                            .setColorFill(colorFill)
                             .bulid();
                     pp.setDrawTriangle(drawTriangle);
                     pp.repaint();
@@ -118,7 +120,7 @@ public class Paint extends javax.swing.JFrame {
                             .setRadius(0)
                             .setFill(fill)
                             .setColorBorder(colorBorder)
-                            .setColorFill(Color.red)
+                            .setColorFill(colorFill)
                             .bulid();
                     pp.setDrawWheel(drawWheel);
                     pp.repaint();
@@ -139,6 +141,12 @@ public class Paint extends javax.swing.JFrame {
                 }
                 if (choiseArc()) {
                     pp.addObject(whatDraw, drawArc);
+                }
+                if (choiseLine()) {
+                    pp.addObject(whatDraw, drawLine);
+                }
+                if (choiseWheel()) {
+                    pp.addObject(whatDraw, drawWheel);
                 }
             }
 
@@ -193,7 +201,6 @@ public class Paint extends javax.swing.JFrame {
                 }
                 if (choiseWheel()) {
                     tmpx = me.getX() - drawWheel.getX();
-                    System.out.println(drawWheel.getX() + " " + tmpx);
                     drawWheel.setRadius(tmpx);
                     pp.setDrawWheel(drawWheel);
                     pp.repaint();
@@ -247,6 +254,7 @@ public class Paint extends javax.swing.JFrame {
         jToggleButton4 = new javax.swing.JToggleButton();
         jToggleButton5 = new javax.swing.JToggleButton();
         jToggleButton6 = new javax.swing.JToggleButton();
+        jToggleButton7 = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
@@ -255,6 +263,7 @@ public class Paint extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        clear = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -313,17 +322,26 @@ public class Paint extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jToggleButton7);
+        jToggleButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/point.png"))); // NOI18N
+        jToggleButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(91, 91, 91)
+                        .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
                         .addComponent(jLabel1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -348,9 +366,15 @@ public class Paint extends javax.swing.JFrame {
                     .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel4.setBackground(new java.awt.Color(0, 0, 0));
@@ -458,15 +482,25 @@ public class Paint extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jMenu1.setText("File");
+        jMenu1.setText("Plik");
 
-        jMenuItem1.setText("jMenuItem1");
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Nowy");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuItem1);
+
+        clear.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        clear.setText("Wyczyść");
+        clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearActionPerformed(evt);
+            }
+        });
+        jMenu1.add(clear);
 
         jMenuBar1.add(jMenu1);
 
@@ -503,25 +537,38 @@ public class Paint extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButton4ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        fill=!fill;
+        fill = !fill;
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
         Color newColor = JColorChooser.showDialog(
                 this,
-                "Choose Background Color",
+                "Wybierz kolor obramowania",
                 colorBorder);
         jPanel4.setBackground(newColor);
         colorBorder = newColor;
     }//GEN-LAST:event_jPanel4MouseClicked
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-      edu.Window.Size.run(pp );
+        edu.Window.Size.run(pp);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
-        // TODO add your handling code here:
+        Color newColor = JColorChooser.showDialog(
+                this,
+                "Wybierz kolor wypełnienia",
+                colorFill);
+        jPanel5.setBackground(newColor);
+        colorFill= newColor;
     }//GEN-LAST:event_jPanel5MouseClicked
+
+    private void jToggleButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton7ActionPerformed
+        whatDraw = "point";
+    }//GEN-LAST:event_jToggleButton7ActionPerformed
+
+    private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
+        pp.wipe();
+    }//GEN-LAST:event_clearActionPerformed
 
     /**
      * @param args the command line arguments
@@ -560,6 +607,7 @@ public class Paint extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JMenuItem clear;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JLabel jLabel1;
@@ -579,5 +627,6 @@ public class Paint extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton4;
     private javax.swing.JToggleButton jToggleButton5;
     private javax.swing.JToggleButton jToggleButton6;
+    private javax.swing.JToggleButton jToggleButton7;
     // End of variables declaration//GEN-END:variables
 }
