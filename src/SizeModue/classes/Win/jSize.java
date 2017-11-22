@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Window;
+package Win;
 
+import Class.JPaintPanel;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 
@@ -12,17 +13,19 @@ import javax.swing.JColorChooser;
  *
  * @author Admin
  */
-public class Size extends javax.swing.JFrame {
-
+public class jSize extends javax.swing.JFrame {
     int width, height;
-    private Color color = Color.BLACK;
-    edu.Class.JPaintPanel pp;
-
-    /**
-     * Creates new form Size
-     */
-    public Size() {
+    private Color color = Color.WHITE;
+    JPaintPanel pp;
+    public jSize() {
         initComponents();
+         jTextField1.setText("400");
+        jTextField2.setText("200");
+        jLabel1.setText("Wysokość: ");
+        jLabel2.setText("Szerokość: ");
+        jLabel3.setText("Kolor: ");
+        jButton1.setText("Zamknij");
+        jButton2.setText("Zatwiedź");
     }
 
     /**
@@ -40,53 +43,33 @@ public class Size extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         chColor = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 50, 20);
         flowLayout1.setAlignOnBaseline(true);
         jPanel1.setLayout(flowLayout1);
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel1.setText("Wysokość:");
         jPanel1.add(jLabel1);
 
-        jTextField1.setText("100");
         jTextField1.setPreferredSize(new java.awt.Dimension(100, 30));
         jPanel1.add(jTextField1);
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 50, 20));
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel2.setText("Szerokość:");
         jPanel2.add(jLabel2);
 
-        jTextField2.setText("200");
         jTextField2.setPreferredSize(new java.awt.Dimension(100, 30));
         jPanel2.add(jTextField2);
-
-        jButton1.setText("Zamknij");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Zatwierdź");
-        jButton2.setToolTipText("");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 50, 20));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel3.setText("Kolor:      ");
         jPanel3.add(jLabel3);
 
         chColor.setBackground(new java.awt.Color(255, 255, 255));
@@ -94,7 +77,7 @@ public class Size extends javax.swing.JFrame {
         chColor.setPreferredSize(new java.awt.Dimension(100, 30));
         chColor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                choiseColorClicked(evt);
+                chColorchoiseColorClicked(evt);
             }
         });
 
@@ -111,43 +94,66 @@ public class Size extends javax.swing.JFrame {
 
         jPanel3.add(chColor);
 
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, 0)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(40, 40, 40)
-                        .addComponent(jButton2)
-                        .addGap(66, 66, 66))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                        .addGap(34, 34, 34))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                         .addContainerGap())
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(40, 40, 40)
+                .addComponent(jButton2)
+                .addGap(83, 83, 83))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addContainerGap())
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chColorchoiseColorClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chColorchoiseColorClicked
+        Color newColor;
+        newColor = JColorChooser.showDialog(
+            this,
+            "Wybierz kolor tła", color);
+        chColor.setBackground(newColor);
+        color = newColor;
+    }//GEN-LAST:event_chColorchoiseColorClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setVisible(false);
@@ -160,21 +166,10 @@ public class Size extends javax.swing.JFrame {
         pp.setBackground(color);
         pp.wipe();
         this.dispose();
-
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void choiseColorClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_choiseColorClicked
-        Color newColor;
-        newColor = JColorChooser.showDialog(
-                this,
-                "Wybbierz kolor tła", color);
-        chColor.setBackground(newColor);
-        color=newColor;
-    }//GEN-LAST:event_choiseColorClicked
-
-    public static void run(edu.Class.JPaintPanel p) {
+    public static void run(JPaintPanel p) {
         java.awt.EventQueue.invokeLater(() -> {
-            Size x1 = new Size();
+            jSize x1 = new jSize();
             x1.setVisible(true);
             x1.pp = p;
         });

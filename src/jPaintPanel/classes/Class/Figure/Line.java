@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Class.Figure;
+package Class.Figure;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 public class Line implements Serializable, edu.Interface.Figure {
@@ -66,7 +67,13 @@ public class Line implements Serializable, edu.Interface.Figure {
         g2.draw(l);
         g2.setColor(c);
     }
-
+    public void drawBorder(Graphics2D g2D){
+        double width= xEnd-xStart;
+        double height= yEnd-yStart;
+        Rectangle2D rc= new Rectangle2D.Double(xStart-10,yStart,width+20,height+20);
+        g2D.draw(rc);
+    }
+    
     public Color getColor() {
         return color;
     }

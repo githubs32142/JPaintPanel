@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Interface;
+package Interface;
 
-import edu.Class.Figure.Square;
+
 import java.util.List;
 
 /**
  *
  * @author Admin
+ * @param <T>
  */
 @FunctionalInterface
-public interface ContainsSquare {
-    public int contains(List<Square> list,double x, double y);
+public interface Contains<T extends Object>  {
+   public int contains(List<T> list,double x, double y);
 }

@@ -1,4 +1,4 @@
-package edu.Class.Contains;
+package Class.Contains;
 
 import java.util.ArrayList;
 import java.util.List;

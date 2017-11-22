@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Interface;
+package Interface;
 
-
+import Class.Figure.Triangle;
 import java.util.List;
 
 /**
@@ -13,5 +13,5 @@ import java.util.List;
  * @author Admin
  */
 public interface ContainsTriangle {
-    public int contains(List<edu.Class.Figure.Triangle >list,double x, double y);
+    public int contains(List<Triangle >list,double x, double y);
 }

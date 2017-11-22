@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Class.Figure;
+package Class.Figure;
 
 import edu.Interface.Figure;
 import edu.Interface.ICheckFill;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 /**
@@ -115,7 +116,10 @@ public class Wheel implements Figure, Serializable {
         };
         s.ifFill(fill);
     }
-
+    public void drawBorder(Graphics2D g2D){
+        Rectangle2D rc= new Rectangle2D.Double(x-10,y-10,radius+20,radius+20);
+        g2D.draw(rc);
+    }
     @Override
     public boolean contains(double x, double y) {
         return new Ellipse2D.Double(this.x, this.y, radius, radius).contains(x, y);

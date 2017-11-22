@@ -3,28 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Class.Figure;
+package Class.Figure;
 
 import edu.Interface.Figure;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.io.Serializable;
 import edu.Interface.ICheckFill;
+import java.awt.geom.Rectangle2D;
 
-public class Rectangle implements Figure {
+public class Square implements Serializable, Figure {
 
-    private double width, height;
+    private double width;
     private double x, y;
     private boolean fill;
     private Color colorFill;
     private Color colorBorder;
-private int id;
-    private Rectangle(Rectangle.Builder b) {
+    private int id;
+
+    private Square(Square.BuilderSquare b) {
         this.colorBorder = b.colorBorder;
         this.colorFill = b.colorFill;
         this.width = b.width;
-        this.x = b.x;
-        this.y = b.y;
         this.fill=b.fill;
+        setXY(b.x, b.y);
 
     }
 
@@ -36,27 +39,25 @@ private int id;
         return y;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
+    public void setX(double x) {
+        this.x = x;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public double getHeight() {
-        return height;
+    public void setY(double y) {
+        this.y = y;
     }
 
     public double getWidth() {
         return width;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setWidth(double width) {
+        this.width = width;
     }
 
-    public void setY(double y) {
+    @Override
+    public void setXY(double x, double y) {
+        this.x = x;
         this.y = y;
     }
 
@@ -93,14 +94,8 @@ private int id;
     }
 
     @Override
-    public boolean contains(double x, double y) {
-        java.awt.Rectangle r = new java.awt.Rectangle((int) getX(), (int) getY(), (int) width, (int) height);
-        return r.contains(x, y);
-    }
-
-    @Override
     public void paint(Graphics2D g2) {
-        java.awt.Rectangle r = new java.awt.Rectangle((int) getX(), (int) getY(), (int) width, (int) height);
+        Rectangle r = new Rectangle((int) getX(), (int) getY(), (int) width, (int) width);
         ICheckFill s;
         s = (boolean b) -> {
             if (!b) {
@@ -119,57 +114,55 @@ private int id;
         };
         s.ifFill(fill);
     }
-
+    public void drawBorder(Graphics2D g2D){
+        Rectangle2D rc= new Rectangle2D.Double(x-10,y-10,width+20,width+20);
+        g2D.draw(rc);
+    }
     @Override
-    public void setXY(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public boolean contains(double x, double y) {
+        Rectangle r = new Rectangle((int) getX(), (int) getY(), (int) width, (int) width);
+        return r.contains(x, y);
     }
 
-    public static class Builder {
+    public static class BuilderSquare {
 
-        private double x, y, width, height;
+        private double x, y, width;
         private boolean fill;
         private Color colorFill;
         private Color colorBorder;
 
-        public Builder setX(double x) {
-            Builder.this.x = x;
+        public BuilderSquare setX(double x) {
+            BuilderSquare.this.x = x;
             return this;
         }
 
-        public Builder setY(double y) {
-            Builder.this.y = y;
+        public BuilderSquare setY(double y) {
+            BuilderSquare.this.y = y;
             return this;
         }
 
-        public Builder setWidth(double width) {
-            Builder.this.width = width;
+        public BuilderSquare setWidth(double width) {
+            BuilderSquare.this.width = width;
             return this;
         }
 
-        public Builder setHeight(double height) {
-            Builder.this.height = height;
+        public BuilderSquare setColorFill(Color c) {
+            BuilderSquare.this.colorFill = c;
             return this;
         }
 
-        public Builder setColorFill(Color c) {
-            Builder.this.colorFill = c;
+        public BuilderSquare setColorBorder(Color c) {
+            BuilderSquare.this.colorBorder = c;
             return this;
         }
 
-        public Builder setColorBorder(Color c) {
-            Builder.this.colorBorder = c;
+        public BuilderSquare setFill(boolean b) {
+            BuilderSquare.this.fill = b;
             return this;
         }
 
-        public Builder setFill(boolean b) {
-            Builder.this.fill = b;
-            return this;
-        }
-
-        public Rectangle bulid() {
-            return new Rectangle(this);
+        public Square bulid() {
+            return new Square(this);
         }
     }
 }

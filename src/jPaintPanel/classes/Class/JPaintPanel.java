@@ -1,25 +1,24 @@
-package edu.Class;
+package Class;
 
-import edu.Class.Figure.Arc;
-import edu.Class.Figure.Line;
-import edu.Class.Figure.Rhomb;
-import edu.Class.Figure.Triangle;
-import edu.Class.Figure.Square;
-import edu.Class.Figure.Wheel;
-import edu.Interface.Contains;
+import Class.Figure.Arc;
+import Class.Figure.Line;
+import Class.Figure.Rhomb;
+import Class.Figure.Triangle;
+import Class.Figure.Square;
+import Class.Figure.Wheel;
+import Interface.Contains;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
-import edu.Interface.ContainsSquare;
+import Interface.ContainsSquare;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.function.Predicate;
+import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 
 public class JPaintPanel extends JPanel {
@@ -37,7 +36,11 @@ public class JPaintPanel extends JPanel {
     List<Rhomb> rhombs = new ArrayList<>();
     List<Wheel> wheel = new ArrayList<>();
     private BufferedImage paintImage;
+    private WhatClicked wC = new WhatClicked();
 
+    /**
+     ** Metoda czyści wszystkie figury geometryczne.
+     */
     public void wipe() {
         square.clear();
         triangles.clear();
@@ -54,6 +57,12 @@ public class JPaintPanel extends JPanel {
         repaint();
     }
 
+    /**
+     ** Metoda, która zmienia rozmiar okna
+     *
+     * @param width szerokość
+     * @param height wysokość
+     */
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
@@ -74,8 +83,9 @@ public class JPaintPanel extends JPanel {
         if (imageIsNull()) {
             g2D.drawImage(paintImage, 0, 0, null);
         }
-        square.stream().forEach((square1) -> {
-            square1.paint(g2D);
+
+        square.stream().forEach((t) -> {
+            t.paint(g2D);
         });
         triangles.stream().forEach((t) -> {
             t.paint(g2D);
@@ -110,6 +120,26 @@ public class JPaintPanel extends JPanel {
         if (wheelIsNull()) {
             drawWheel.paint(g2D);
         }
+
+        if (isLine(wC.getType())) {
+            lines.get(wC.getId()).drawBorder(g2D);
+        }
+        if (isWheelType(wC.getType())) {
+            wheel.get(wC.getId()).drawBorder(g2D);
+        }
+        if (isArcType(wC.getType())) {
+            arcs.get(wC.getId()).drawBorder(g2D);
+        }
+        if (isRhombType(wC.getType())) {
+            rhombs.get(wC.getId()).drawBorder(g2D);
+        }
+        if (isSquareType(wC.getType())) {
+            square.get(wC.getId()).drawBorder(g2D);
+        }
+        if (isTriangleType(wC.getType())) {
+            triangles.get(wC.getId()).drawBorder(g2D);
+        }
+
     }
 
     private boolean wheelIsNull() {
@@ -226,7 +256,7 @@ public class JPaintPanel extends JPanel {
      * @return index trójkąta jeżeli >=0 . jeżeli -1 to nie zawiera się
      */
     private int returnIndexdrawTriangle(double x, double y) {
-        edu.Interface.ContainsTriangle t = (List<Triangle> list, double x1, double y1) -> {
+        Interface.ContainsTriangle t = (List<Triangle> list, double x1, double y1) -> {
             for (int i = 0; i < list.size(); i++) {
                 Triangle s = (Triangle) list.get(i);
                 if (list.get(i).contains(x1, y1)) {
@@ -239,7 +269,7 @@ public class JPaintPanel extends JPanel {
     }
 
     private int returnIndexLine(double x, double y) {
-        edu.Interface.Contains c = (Contains<Line>) (List<Line> list, double x1, double y1) -> {
+        Interface.Contains c = (Contains<Line>) (List<Line> list, double x1, double y1) -> {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).contains(x1, y1)) {
                     return i;
@@ -251,7 +281,7 @@ public class JPaintPanel extends JPanel {
     }
 
     private int returnIndexArc(double x, double y) {
-        edu.Interface.Contains c = (Contains<Arc>) (List<Arc> list, double x1, double y1) -> {
+        Interface.Contains c = (Contains<Arc>) (List<Arc> list, double x1, double y1) -> {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).contains(x1, y1)) {
                     return i;
@@ -263,7 +293,7 @@ public class JPaintPanel extends JPanel {
     }
 
     private int returnIndexWheel(double x, double y) {
-        edu.Interface.Contains c = (Contains<Wheel>) (List<Wheel> list, double x1, double y1) -> {
+        Interface.Contains c = (Contains<Wheel>) (List<Wheel> list, double x1, double y1) -> {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).contains(x1, y1)) {
                     return i;
@@ -275,7 +305,7 @@ public class JPaintPanel extends JPanel {
     }
 
     private int returnIndexRhomb(double x, double y) {
-        edu.Interface.Contains c = (Contains<Rhomb>) (List<Rhomb> list, double x1, double y1) -> {
+        Interface.Contains c = (Contains<Rhomb>) (List<Rhomb> list, double x1, double y1) -> {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).contains(x1, y1)) {
                     return i;
@@ -286,7 +316,13 @@ public class JPaintPanel extends JPanel {
         return c.contains(rhombs, x, y);
     }
 
-    public void changeColorBorder(WhatClicked wC, Color c) {
+    /**
+     ** Metoda, która stawia kolor dla odpowiednio wybranej figury
+     *
+     * @param wC- zmienna która zawiera typ oraz id obiektu
+     * @param c wybrany kolor
+     */
+    public void setColorBorder(WhatClicked wC, Color c) {
         if (isLine(wC.getType())) {
             setColorLine(wC.getId(), c);
         }
@@ -302,6 +338,10 @@ public class JPaintPanel extends JPanel {
         if (isSquareType(wC.getType())) {
             setColorBorderSquare(wC.getId(), c);
         }
+        if (isTriangleType(wC.getType())) {
+            setColorBorderTriangle(wC.getId(), c);
+        }
+        repaint();
     }
 
     private void setColorLine(int id, Color c) {
@@ -317,7 +357,11 @@ public class JPaintPanel extends JPanel {
     }
 
     private void setColorBorderSquare(int id, Color c) {
-        rhombs.get(id).setColorBorder(c);
+        square.get(id).setColorBorder(c);
+    }
+
+    private void setColorBorderTriangle(int id, Color c) {
+        triangles.get(id).setColorBorder(c);
     }
 
     private void setColorArc(int id, Color c) {
@@ -365,6 +409,14 @@ public class JPaintPanel extends JPanel {
         this.drawArc = drawArc;
     }
 
+    /**
+     ** Metoda, która zwraca index oraz typ figury która znajduje się na
+     * podanych parametrach
+     *
+     * @param x - współrzędna x
+     * @param y - współrzędna y
+     * @return zmienna, która zawiera typ oraz id obiektu na liście
+     */
     public WhatClicked whatFigureClicked(double x, double y) {
         int tmp = -1;
         tmp = returnIndexSquare(x, y);
@@ -459,6 +511,12 @@ public class JPaintPanel extends JPanel {
         return "square".equals(typeObj);
     }
 
+    /**
+     ** Metoda, która ładuje obrazek o podanej ścieżce dostępu
+     *
+     * @param file- plik z ktorego pobieramy dane
+     * @throws IOException wyjątek I/O
+     */
     public void loadImage(File file) throws IOException {
         paintImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         paintImage = ImageIO.read(file);
@@ -471,6 +529,171 @@ public class JPaintPanel extends JPanel {
 
     public void setDrawWheel(Wheel drawWheel) {
         this.drawWheel = drawWheel;
+    }
+
+    private Color colorBorderSquare(int i) {
+        return square.get(i).getColorBorder();
+    }
+
+    private Color colorFillSquare(int i) {
+        return square.get(i).getColorFill();
+    }
+
+    private Color colorBorderTriangle(int i) {
+        return triangles.get(i).getColorBorder();
+    }
+
+    private Color colorFillTriangle(int i) {
+        return triangles.get(i).getColorFill();
+    }
+
+    private Color colorBorderWheel(int i) {
+        return wheel.get(i).getColorBorder();
+    }
+
+    private Color colorFillWheel(int i) {
+        return wheel.get(i).getColorFill();
+    }
+
+    private Color colorBorderRhomb(int i) {
+        return rhombs.get(i).getColorBorder();
+    }
+
+    private Color colorFillRhomb(int i) {
+        return rhombs.get(i).getColorFill();
+    }
+
+    private Color getColorArc(int i) {
+        return arcs.get(i).getColor();
+    }
+
+    private Color getColorLine(int i) {
+        return lines.get(i).getColor();
+    }
+
+    /**
+     ** Metoda, która zwraca kolor obramowania podanej figury
+     *
+     * @param wC zmienna, która zawiera id oraz typ obiektu
+     * @return kolor obramowania figury jeżeli nic nie znajdzie zwraca kolor
+     * czarny
+     */
+    public Color getColorBorder(WhatClicked wC) {
+        if (isSquareType(wC.getType())) {
+            return square.get(wC.getId()).getColorBorder();
+        }
+        if (isRhombType(wC.getType())) {
+            return rhombs.get(wC.getId()).getColorBorder();
+        }
+        if (isWheelType(wC.getType())) {
+            return wheel.get(wC.getId()).getColorBorder();
+        }
+        if (isArcType(wC.getType())) {
+            return arcs.get(wC.getId()).getColor();
+        }
+        if (isLine(wC.getType())) {
+            return lines.get(wC.getId()).getColor();
+        }
+        return Color.black;
+    }
+
+    private boolean isFillRhomb(int i) {
+        return rhombs.get(i).isFill();
+    }
+
+    private boolean isFillSquare(int i) {
+        return square.get(i).isFill();
+    }
+
+    private boolean isFillTriangle(int i) {
+        return triangles.get(i).isFill();
+    }
+
+    private boolean isFillWheel(int i) {
+        return wheel.get(i).isFill();
+    }
+
+    /**
+     ** Metoda, która sprawdza, czy obiekt posiada wypełnienie
+     *
+     * @param wC zmienna która przechowuje informacje na temat id oraz typu
+     * obiektu
+     * @return true jeżeli zawiera wypełnienie w przeciwnym wypadku false
+     */
+    public boolean isFillObject(WhatClicked wC) {
+        if ("rhomb".equals(wC.getType())) {
+            return isFillRhomb(wC.getId());
+        }
+        if ("square".equals(wC.getType())) {
+            return isFillSquare(wC.getId());
+        }
+        if ("triangle".equals(wC.getType())) {
+            return isFillTriangle(wC.getId());
+        }
+        if ("wheel".equals(wC.getType())) {
+            return isFillWheel(wC.getId());
+        }
+        return false;
+    }
+
+    /**
+     ** Metoda, która ustawia kolor wypełnienia
+     *
+     * @param wC zmienna, która przechowuje informacje na temat id oraz typu
+     * obiektu
+     * @param c kolor
+     */
+    public void setFillColor(WhatClicked wC, Color c) {
+        if ("rhomb".equals(wC.getType())) {
+            rhombs.get(wC.getId()).setColorFill(c);
+        }
+        if ("square".equals(wC.getType())) {
+            square.get(wC.getId()).setColorFill(c);
+        }
+        if ("triangle".equals(wC.getType())) {
+            triangles.get(wC.getId()).setColorFill(c);
+        }
+        if ("wheel".equals(wC.getType())) {
+            wheel.get(wC.getId()).setColorFill(c);
+        }
+        repaint();
+    }
+
+    public Color getColorFill(WhatClicked wC) {
+        if (isSquareType(wC.getType())) {
+            return square.get(wC.getId()).getColorFill();
+        }
+        if (isRhombType(wC.getType())) {
+            return rhombs.get(wC.getId()).getColorFill();
+        }
+        if (isWheelType(wC.getType())) {
+            return wheel.get(wC.getId()).getColorFill();
+        }
+        if (isTriangleType(wC.getType())) {
+            return triangles.get(wC.getId()).getColorFill();
+        }
+        return Color.black;
+    }
+
+    public void setFill(WhatClicked wC, boolean isFiil) {
+        if (isSquareType(wC.getType())) {
+            square.get(wC.getId()).setFill(isFiil);
+        }
+        if (isRhombType(wC.getType())) {
+            rhombs.get(wC.getId()).setFill(isFiil);
+        }
+        if (isWheelType(wC.getType())) {
+            wheel.get(wC.getId()).setFill(isFiil);
+        }
+        if (isTriangleType(wC.getType())) {
+            triangles.get(wC.getId()).setFill(isFiil);
+        }
+        repaint();
+    }
+
+    public void setwC(WhatClicked wC) {
+        this.wC = wC;
+        repaint();
     }
 
 }

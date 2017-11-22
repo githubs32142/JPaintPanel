@@ -1,18 +1,21 @@
 package edu.Window;
 
-import edu.Class.Figure.Arc;
-import edu.Class.Figure.Line;
-import edu.Class.Figure.Rhomb;
-import edu.Class.JPaintPanel;
-import edu.Class.Figure.Square;
-import edu.Class.Figure.Triangle;
-import edu.Class.Figure.Wheel;
-import edu.Class.WhatClicked;
+import Class.Figure.Arc;
+import Class.Figure.Line;
+import Class.Figure.Rhomb;
+import Class.JPaintPanel;
+import Class.Figure.Square;
+import Class.Figure.Triangle;
+import Class.Figure.Wheel;
+import Class.WhatClicked;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JColorChooser;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class Paint extends javax.swing.JFrame {
 
@@ -26,19 +29,38 @@ public class Paint extends javax.swing.JFrame {
     private Line drawLine;
     String whatDraw = "arc";
     private Color colorBorder = Color.BLACK;
-    private Color colorFill= Color.black;
+    private Color colorFill = Color.black;
     private boolean fill = false;
     private WhatClicked wC = new WhatClicked();
+    JScrollPane scroll = new JScrollPane();
 
     public Paint() {
         initComponents();
-        add(pp, java.awt.BorderLayout.CENTER);
+        initText();
+        scroll.getViewport().setView(pp);
+        scroll.setHorizontalScrollBarPolicy(
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setVerticalScrollBarPolicy(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.add(BorderLayout.CENTER, scroll);
         this.setSize(1000, 600);
         pp.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 wC = pp.whatFigureClicked(me.getX(), me.getY());
-                System.out.println(wC.toString());
+                pp.setwC(wC);
+                if ("point".equals(whatDraw)) {
+                    colorBorder = pp.getColorBorder(wC);
+                    jPanel4.setBackground(colorBorder);
+                }
+                if ("point".equals(whatDraw)) {
+                    colorFill = pp.getColorFill(wC);
+                    jPanel5.setBackground(colorFill);
+                }
+                if ("point".equals(whatDraw)) {
+                    fill = pp.isFillObject(wC);
+                    jCheckBox1.setSelected(fill);
+                }
             }
 
             @Override
@@ -264,15 +286,12 @@ public class Paint extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         clear = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("PWSTE Paint");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.black, null));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel1.setText("Kształty");
 
         buttonGroup1.add(jToggleButton1);
         jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/arrow.png"))); // NOI18N
@@ -396,7 +415,6 @@ public class Paint extends javax.swing.JFrame {
         );
 
         jCheckBox1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jCheckBox1.setText("Wypełnienie");
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox1ActionPerformed(evt);
@@ -404,7 +422,6 @@ public class Paint extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel2.setText("Obramowanie");
 
         jPanel5.setBackground(new java.awt.Color(0, 0, 0));
         jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -482,10 +499,7 @@ public class Paint extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jMenu1.setText("Plik");
-
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Nowy");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -494,7 +508,6 @@ public class Paint extends javax.swing.JFrame {
         jMenu1.add(jMenuItem1);
 
         clear.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        clear.setText("Wyczyść");
         clear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearActionPerformed(evt);
@@ -503,9 +516,6 @@ public class Paint extends javax.swing.JFrame {
         jMenu1.add(clear);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -537,7 +547,14 @@ public class Paint extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButton4ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        fill = !fill;
+        if ("point".equals(whatDraw)) {
+            fill = pp.isFillObject(wC);
+            fill = !fill;
+            pp.setFill(wC, fill);
+        } else {
+            fill = !fill;
+        }
+
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
@@ -547,10 +564,13 @@ public class Paint extends javax.swing.JFrame {
                 colorBorder);
         jPanel4.setBackground(newColor);
         colorBorder = newColor;
+        if ("point".equals(whatDraw)) {
+            pp.setColorBorder(wC, newColor);
+        }
     }//GEN-LAST:event_jPanel4MouseClicked
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        edu.Window.Size.run(pp);
+        Win.jSize.run(pp);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
@@ -559,7 +579,10 @@ public class Paint extends javax.swing.JFrame {
                 "Wybierz kolor wypełnienia",
                 colorFill);
         jPanel5.setBackground(newColor);
-        colorFill= newColor;
+        colorFill = newColor;
+        if ("point".equals(whatDraw)) {
+            pp.setFillColor(wC, newColor);
+        }
     }//GEN-LAST:event_jPanel5MouseClicked
 
     private void jToggleButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton7ActionPerformed
@@ -598,11 +621,18 @@ public class Paint extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Paint().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Paint().setVisible(true);
         });
+    }
+
+    public void initText() {
+        jLabel1.setText("Kształty");
+        jCheckBox1.setText("Wypełnienie");
+        jLabel2.setText("Obramowanie");
+        jMenu1.setText("Plik");
+        jMenuItem1.setText("Nowy");
+        clear.setText("Wyczyść");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -613,7 +643,6 @@ public class Paint extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;

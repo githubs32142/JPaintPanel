@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Class;
+package Class;
 
 public class WhatClicked {
     private int id;

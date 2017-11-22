@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Class.Contains;
+package Class.Contains;
 
 public class Contains {
     private int idObject;

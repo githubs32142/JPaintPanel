@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.Class.Figure;
+package Class.Figure;
 
 import edu.Interface.Figure;
 import java.awt.Color;
@@ -14,21 +14,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import edu.Interface.ICheckFill;
+import java.awt.geom.Rectangle2D;
 
-public class Rhomb implements Serializable, Figure {
+public class Triangle implements Serializable, Figure {
 
     private double x, y, width, height;
     private boolean fill;
-    List<Point> points = new ArrayList();
+    private List<Point> points = new ArrayList();
     private Color colorFill;
     private Color colorBorder;
     private int id;
 
-    private Rhomb(Rhomb.BuilderRhomb b) {
+    private Triangle(Triangle.BuilderTriangle b) {
         this.colorBorder = b.colorBorder;
         this.colorFill = b.colorFill;
+        this.height = b.height;
         this.width = b.width;
-        this.height=b.height;
         this.fill = b.fill;
         setXY(b.x, b.y);
 
@@ -38,42 +39,43 @@ public class Rhomb implements Serializable, Figure {
         return x;
     }
 
-    public void setX(double x) {
-        setXY(x, this.y);
-    }
-
     public double getY() {
         return y;
-    }
-
-    public void setY(double y) {
-        setXY(this.x, y);
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-        setXY(this.x, this.y);
     }
 
     public double getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
-        setXY(this.x, this.y);
+    public double getWidth() {
+        return width;
     }
 
-    public boolean isFill() {
-        return fill;
+    public void setX(double x) {
+        setXY(x, this.y);
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        setXY(this.x, y);
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+        this.setXY(x, y);
+    }
+
+    public void setWidth(double weight) {
+        this.width = weight;
+        this.setXY(x, y);
     }
 
     public void setFill(boolean fill) {
         this.fill = fill;
+    }
+
+    public boolean isFill() {
+        return fill;
     }
 
     public Color getColorFill() {
@@ -98,7 +100,6 @@ public class Rhomb implements Serializable, Figure {
         p.addPoint(points.get(0).x, points.get(0).y);
         p.addPoint(points.get(1).x, points.get(1).y);
         p.addPoint(points.get(2).x, points.get(2).y);
-        p.addPoint(points.get(3).x, points.get(3).y);
         ICheckFill s;
         s = (boolean b) -> {
             if (!b) {
@@ -106,91 +107,88 @@ public class Rhomb implements Serializable, Figure {
                 g2.setColor(colorBorder);
                 g2.draw(p);
                 g2.setColor(col);
-                //   System.out.println("dddd");
             } else {
                 Color col = g2.getColor();
-               g2.setColor(colorBorder);
-               g2.draw(p);
-               g2.setColor(colorFill);
+                g2.setColor(colorBorder);
+                g2.draw(p);
+                g2.setColor(colorFill);
                 g2.fill(p);
                 g2.setColor(col);
             }
         };
         s.ifFill(fill);
     }
-
+    public void drawBorder(Graphics2D g2D){
+        Rectangle2D rc= new Rectangle2D.Double(x-10,y-10,width+20,height+20);
+        g2D.draw(rc);
+    }
     @Override
     public boolean contains(double x, double y) {
+        points.clear();
+        points.add(new Point((int) this.x, (int) (this.y + height)));
+        points.add(new Point((int) (this.x + (this.width / 2)), (int) (this.y)));
+        points.add(new Point((int) ((this.x + this.width)), (int) (this.y + height)));
         Polygon p = new Polygon();
         p.addPoint(points.get(0).x, points.get(0).y);
         p.addPoint(points.get(1).x, points.get(1).y);
         p.addPoint(points.get(2).x, points.get(2).y);
-        p.addPoint(points.get(3).x, points.get(3).y);
         return p.contains(x, y);
     }
 
     @Override
     public void setXY(double x, double y) {
-        double b;
         this.x = x;
         this.y = y;
         points.clear();
-        points.add(new Point((int) (x), (int) (y + height)));
-        try {//tg(60) = sqrt(3)
-            b = this.height / Math.sqrt(3);
-            // System.out.println(b);
-        } catch (Exception ex) {
-            b = 1;
-        }
-        points.add(new Point((int) (x + b), (int) (y)));
-        points.add(new Point((int) (x + b + width), (int) (y)));
-        points.add(new Point((int) (x + width), (int) (y + height)));
+        points.add(new Point((int) (x + (this.width / 2)), (int) (y)));
+        points.add(new Point((int) x, (int) (y + height)));
+        points.add(new Point((int) ((x + this.width)), (int) (y + height)));
     }
 
-    public static class BuilderRhomb {
+    public static class BuilderTriangle {
 
         private double x, y, width, height;
         private boolean fill;
         private Color colorFill;
         private Color colorBorder;
 
-        public BuilderRhomb setX(double x) {
-            BuilderRhomb.this.x = x;
+        public BuilderTriangle setX(double x) {
+            BuilderTriangle.this.x = x;
             return this;
         }
 
-        public BuilderRhomb setY(double y) {
-            BuilderRhomb.this.y = y;
+        public BuilderTriangle setY(double y) {
+            BuilderTriangle.this.y = y;
             return this;
         }
 
-        public BuilderRhomb setWidth(double width) {
-            BuilderRhomb.this.width = width;
+        public BuilderTriangle setWidth(double width) {
+            BuilderTriangle.this.width = width;
             return this;
         }
 
-        public BuilderRhomb setHeight(double height) {
-            BuilderRhomb.this.height = height;
+        public BuilderTriangle setHeight(double height) {
+            BuilderTriangle.this.height = height;
             return this;
         }
 
-        public BuilderRhomb setColorFill(Color c) {
-            BuilderRhomb.this.colorFill = c;
+        public BuilderTriangle setColorFill(Color c) {
+            BuilderTriangle.this.colorFill = c;
             return this;
         }
 
-        public BuilderRhomb setColorBorder(Color c) {
-            BuilderRhomb.this.colorBorder = c;
+        public BuilderTriangle setColorBorder(Color c) {
+            BuilderTriangle.this.colorBorder = c;
             return this;
         }
 
-        public BuilderRhomb setFill(boolean b) {
-            BuilderRhomb.this.fill = b;
+        public BuilderTriangle setFill(boolean b) {
+            BuilderTriangle.this.fill = b;
             return this;
         }
 
-        public Rhomb bulid() {
-            return new Rhomb(this);
+        public Triangle bulid() {
+            return new Triangle(this);
         }
     }
 }
