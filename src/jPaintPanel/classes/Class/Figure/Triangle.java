@@ -122,6 +122,7 @@ public class Triangle implements Serializable, Figure {
         Rectangle2D rc= new Rectangle2D.Double(x-10,y-10,width+20,height+20);
         g2D.draw(rc);
     }
+    
     @Override
     public boolean contains(double x, double y) {
         points.clear();

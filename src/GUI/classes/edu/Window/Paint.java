@@ -13,9 +13,16 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public class Paint extends javax.swing.JFrame {
 
@@ -37,6 +44,7 @@ public class Paint extends javax.swing.JFrame {
     public Paint() {
         initComponents();
         initText();
+        pp.setSize(1000, 1000);
         scroll.getViewport().setView(pp);
         scroll.setHorizontalScrollBarPolicy(
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -286,6 +294,8 @@ public class Paint extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         clear = new javax.swing.JMenuItem();
+        saveAsJPG = new javax.swing.JMenuItem();
+        openFile = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -515,6 +525,22 @@ public class Paint extends javax.swing.JFrame {
         });
         jMenu1.add(clear);
 
+        saveAsJPG.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveAsJPG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAsJPGActionPerformed(evt);
+            }
+        });
+        jMenu1.add(saveAsJPG);
+
+        openFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFileActionPerformed(evt);
+            }
+        });
+        jMenu1.add(openFile);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -593,6 +619,70 @@ public class Paint extends javax.swing.JFrame {
         pp.wipe();
     }//GEN-LAST:event_clearActionPerformed
 
+    private void saveAsJPGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsJPGActionPerformed
+        JFileChooser saveDialog = new JFileChooser();
+        saveDialog.setDialogTitle("Zapisz jako jpg");
+        UIManager.put("FileChooser.saveDialogTitleText", "Zapisz");
+        UIManager.put("FileChooser.saveInLabelText", "Zapisz w");
+        UIManager.put("FileChooser.saveButtonText", "Zapisz");
+        UIManager.put("FileChooser.cancelButtonText", "Zamknij");
+        UIManager.put("FileChooser.fileNameLabelText", "Nazwa pliku:");
+        UIManager.put("FileChooser.filesOfTypeLabelText", "Typ pliku");
+        UIManager.put("FileChooser.openButtonToolTipText", "Otwórz zaznaczony plik");
+        UIManager.put("FileChooser.cancelButtonToolTipText", "Zamknij okno");
+        UIManager.put("FileChooser.fileNameHeaderText", "Nazwa pliku");
+        UIManager.put("FileChooser.upFolderToolTipText", "Folder wyżej");
+        UIManager.put("FileChooser.homeFolderToolTipText", "Pulpit");
+        UIManager.put("FileChooser.newFolderToolTipText", "Utwórz nowy folder");
+        UIManager.put("FileChooser.listViewButtonToolTipText", "Lista");
+        UIManager.put("FileChooser.newFolderButtonText", "Utwórz nowy folder");
+        UIManager.put("FileChooser.renameFileButtonText", "Zmień nazwę pliku");
+        UIManager.put("FileChooser.deleteFileButtonText", "Usuń plik");
+        UIManager.put("FileChooser.filterLabelText", "Typ pliku");
+        UIManager.put("FileChooser.detailsViewButtonToolTipText", "Szczegóły");
+        UIManager.put("FileChooser.fileSizeHeaderText", "Rozmiar");
+        UIManager.put("FileChooser.fileDateHeaderText", "Data modyfikacji");
+        SwingUtilities.updateComponentTreeUI(saveDialog);
+        if (saveDialog.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = saveDialog.getSelectedFile();
+            pp.saveToPdf(selectedFile);
+        }
+    }//GEN-LAST:event_saveAsJPGActionPerformed
+
+    private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
+        JFileChooser otworz = new JFileChooser();
+        otworz.setDialogTitle("Otwórz projekt");
+        UIManager.put("FileChooser.openDialogTitleText", "Otwórz");
+        UIManager.put("FileChooser.lookInLabelText", "Zobacz w");
+        UIManager.put("FileChooser.openButtonText", "Otwórz");
+        UIManager.put("FileChooser.cancelButtonText", "Zamknij");
+        UIManager.put("FileChooser.fileNameLabelText", "Nazwa pliku:");
+        UIManager.put("FileChooser.filesOfTypeLabelText", "Typ pliku");
+        UIManager.put("FileChooser.openButtonToolTipText", "Otwórz zaznaczony plik");
+        UIManager.put("FileChooser.cancelButtonToolTipText", "Zamknij okno");
+        UIManager.put("FileChooser.fileNameHeaderText", "Nazwa pliku");
+        UIManager.put("FileChooser.upFolderToolTipText", "Folder wyżej");
+        UIManager.put("FileChooser.homeFolderToolTipText", "Pulpit");
+        UIManager.put("FileChooser.newFolderToolTipText", "Utwórz nowy folder");
+        UIManager.put("FileChooser.listViewButtonToolTipText", "Lista");
+        UIManager.put("FileChooser.newFolderButtonText", "Utwórz nowy folder");
+        UIManager.put("FileChooser.renameFileButtonText", "Zmień nazwę pliku");
+        UIManager.put("FileChooser.deleteFileButtonText", "Usuń plik");
+        UIManager.put("FileChooser.filterLabelText", "Typ pliku");
+        UIManager.put("FileChooser.detailsViewButtonToolTipText", "Szczegóły");
+        UIManager.put("FileChooser.fileSizeHeaderText", "Rozmiar");
+        UIManager.put("FileChooser.fileDateHeaderText", "Data modyfikacji");
+        SwingUtilities.updateComponentTreeUI(otworz);
+        if (otworz.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = otworz.getSelectedFile();
+            try {
+                pp.loadImage(file);
+            } catch (IOException ex) {
+                Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_openFileActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -626,13 +716,15 @@ public class Paint extends javax.swing.JFrame {
         });
     }
 
-    public void initText() {
+    private void initText() {
         jLabel1.setText("Kształty");
         jCheckBox1.setText("Wypełnienie");
         jLabel2.setText("Obramowanie");
         jMenu1.setText("Plik");
         jMenuItem1.setText("Nowy");
         clear.setText("Wyczyść");
+        saveAsJPG.setText("Zapisz do jpg");
+        openFile.setText("Otwórz plik jpg");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -657,5 +749,7 @@ public class Paint extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton5;
     private javax.swing.JToggleButton jToggleButton6;
     private javax.swing.JToggleButton jToggleButton7;
+    private javax.swing.JMenuItem openFile;
+    private javax.swing.JMenuItem saveAsJPG;
     // End of variables declaration//GEN-END:variables
 }

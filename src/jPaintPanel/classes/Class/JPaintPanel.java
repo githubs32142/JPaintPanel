@@ -696,4 +696,65 @@ public class JPaintPanel extends JPanel {
         repaint();
     }
 
+    public void saveToPdf(File file) {
+        double xMax = 0;
+        double yMax = 0;
+        for (int i = 0; i < square.size(); i++) {
+            if (xMax < (square.get(i).getX() + square.get(i).getWidth())) {
+                xMax = square.get(i).getX() + square.get(i).getWidth();
+            }
+            if (yMax < (square.get(i).getY() + square.get(i).getWidth())) {
+                yMax = square.get(i).getY() + square.get(i).getWidth();
+            }
+        }
+        for (int i = 0; i < arcs.size(); i++) {
+            if (xMax < (arcs.get(i).getxEnd())) {
+                xMax = arcs.get(i).getxEnd();
+            }
+            if (yMax < (arcs.get(i).getyEnd())) {
+                yMax = arcs.get(i).getyEnd();
+            }
+        }
+        for (int i = 0; i < lines.size(); i++) {
+            if (xMax < (lines.get(i).getxEnd())) {
+                xMax = lines.get(i).getxEnd();
+            }
+            if (yMax < (lines.get(i).getyEnd())) {
+                yMax = lines.get(i).getyEnd();
+            }
+        }
+        for (int i = 0; i < rhombs.size(); i++) {
+            if (xMax < (rhombs.get(i).getX() + rhombs.get(i).getWidth())) {
+                xMax = rhombs.get(i).getX() + rhombs.get(i).getWidth();
+            }
+            if (yMax < (rhombs.get(i).getY() + rhombs.get(i).getHeight())) {
+                yMax = rhombs.get(i).getY() + rhombs.get(i).getHeight();
+            }
+        }
+        for (int i = 0; i < triangles.size(); i++) {
+            if (xMax < (triangles.get(i).getX() + triangles.get(i).getWidth())) {
+                xMax = triangles.get(i).getX() + triangles.get(i).getWidth();
+            }
+            if (yMax < (triangles.get(i).getY() + triangles.get(i).getHeight())) {
+                yMax = triangles.get(i).getY() + triangles.get(i).getHeight();
+            }
+        }
+        for (int i = 0; i < wheel.size(); i++) {
+            if (xMax < (wheel.get(i).getX() + wheel.get(i).getRadius())) {
+                xMax = wheel.get(i).getX() + wheel.get(i).getRadius();
+            }
+            if (yMax < (wheel.get(i).getY() + wheel.get(i).getRadius())) {
+                yMax = wheel.get(i).getY() + wheel.get(i).getRadius();
+            }
+        }
+        BufferedImage img = new BufferedImage((int) xMax+100, (int) yMax+100, BufferedImage.TYPE_INT_RGB);
+        this.print(img.getGraphics()); // or: panel.printAll(...);
+        try {
+            ImageIO.write(img, "jpg", file);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 }
