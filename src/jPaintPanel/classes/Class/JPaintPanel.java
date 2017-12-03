@@ -747,14 +747,78 @@ public class JPaintPanel extends JPanel {
                 yMax = wheel.get(i).getY() + wheel.get(i).getRadius();
             }
         }
-        BufferedImage img = new BufferedImage((int) xMax+100, (int) yMax+100, BufferedImage.TYPE_INT_RGB);
-        this.print(img.getGraphics()); // or: panel.printAll(...);
+        BufferedImage img = new BufferedImage((int) xMax + 100, (int) yMax + 100, BufferedImage.TYPE_INT_RGB);
+        this.print(img.getGraphics());
         try {
             ImageIO.write(img, "jpg", file);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
 
+    public Object getObject(WhatClicked wC) {
+        if ("arc".equals(wC.getType())) {
+            return arcs.get(wC.getId());
+        }
+        if ("rhomb".equals(wC.getType())) {
+            return rhombs.get(wC.getId());
+        }
+        if ("square".equals(wC.getType())) {
+            return square.get(wC.getId());
+        }
+        if ("line".equals(wC.getType())) {
+            return lines.get(wC.getId());
+        }
+        if ("triangle".equals(wC.getType())) {
+            return triangles.get(wC.getId());
+        }
+        if ("wheel".equals(wC.getType())) {
+            return wheel.get(wC.getId());
+        }
+        return new Object();
+    }
+
+    public void setObject(WhatClicked wC, Object o) {
+        if ("arc".equals(wC.getType())) {
+            arcs.set(wC.getId(), (Arc) o);
+        }
+        if ("rhomb".equals(wC.getType())) {
+            rhombs.set(wC.getId(), (Rhomb) o);
+        }
+        if ("square".equals(wC.getType())) {
+            square.set(wC.getId(), (Square) o);
+        }
+        if ("line".equals(wC.getType())) {
+            lines.set(wC.getId(), (Line) o);
+        }
+        if ("triangle".equals(wC.getType())) {
+            triangles.set(wC.getId(), (Triangle) o);
+        }
+        if ("wheel".equals(wC.getType())) {
+            wheel.set(wC.getId(), (Wheel) o);
+        }
+        repaint();
+    }
+
+    public void deleteObject(WhatClicked wC) {
+        if ("arc".equals(wC.getType())) {
+            arcs.remove(wC.getId());
+        }
+        if ("rhomb".equals(wC.getType())) {
+            rhombs.remove(wC.getId());
+        }
+        if ("square".equals(wC.getType())) {
+            square.remove(wC.getId());
+        }
+        if ("line".equals(wC.getType())) {
+            lines.remove(wC.getId());
+        }
+        if ("triangle".equals(wC.getType())) {
+            triangles.remove(wC.getId());
+        }
+        if ("wheel".equals(wC.getType())) {
+            wheel.remove(wC.getId());
+        }
+        repaint();
     }
 }

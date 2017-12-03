@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -27,7 +28,7 @@ import javax.swing.UIManager;
 public class Paint extends javax.swing.JFrame {
 
     int a = 0, b = 0;
-    JPaintPanel pp = new JPaintPanel();
+    JPaintPanel paintPanel = new JPaintPanel();
     private Rhomb drawRhomb;
     private Square drawSquare;
     private Triangle drawTriangle;
@@ -44,29 +45,29 @@ public class Paint extends javax.swing.JFrame {
     public Paint() {
         initComponents();
         initText();
-        pp.setSize(1000, 1000);
-        scroll.getViewport().setView(pp);
+        paintPanel.setSize(1000, 1000);
+        scroll.getViewport().setView(paintPanel);
         scroll.setHorizontalScrollBarPolicy(
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scroll.setVerticalScrollBarPolicy(
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.add(BorderLayout.CENTER, scroll);
         this.setSize(1000, 600);
-        pp.addMouseListener(new MouseListener() {
+        paintPanel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
-                wC = pp.whatFigureClicked(me.getX(), me.getY());
-                pp.setwC(wC);
+                wC = paintPanel.whatFigureClicked(me.getX(), me.getY());
+                paintPanel.setwC(wC);
                 if ("point".equals(whatDraw)) {
-                    colorBorder = pp.getColorBorder(wC);
+                    colorBorder = paintPanel.getColorBorder(wC);
                     jPanel4.setBackground(colorBorder);
                 }
                 if ("point".equals(whatDraw)) {
-                    colorFill = pp.getColorFill(wC);
+                    colorFill = paintPanel.getColorFill(wC);
                     jPanel5.setBackground(colorFill);
                 }
                 if ("point".equals(whatDraw)) {
-                    fill = pp.isFillObject(wC);
+                    fill = paintPanel.isFillObject(wC);
                     jCheckBox1.setSelected(fill);
                 }
             }
@@ -74,8 +75,7 @@ public class Paint extends javax.swing.JFrame {
             @Override
             public void mousePressed(MouseEvent me) {
                 if (choiseRhomb()) {
-                    drawRhomb = pp.getDrawRhomb();
-                    System.out.println(fill);
+                    drawRhomb = paintPanel.getDrawRhomb();
                     drawRhomb = new Rhomb.BuilderRhomb()
                             .setX(me.getX())
                             .setY(me.getY())
@@ -86,11 +86,11 @@ public class Paint extends javax.swing.JFrame {
                             .setColorFill(colorFill)
                             .bulid();
                     // drawRhomb.setFill(fill);
-                    pp.setDrawRhomb(drawRhomb);
-                    pp.repaint();
+                    paintPanel.setDrawRhomb(drawRhomb);
+                    paintPanel.repaint();
                 }
                 if (choiseSquare()) {
-                    drawSquare = pp.getDrawSquare();
+                    drawSquare = paintPanel.getDrawSquare();
                     drawSquare = new Square.BuilderSquare()
                             .setX(me.getX())
                             .setY(me.getY())
@@ -99,11 +99,11 @@ public class Paint extends javax.swing.JFrame {
                             .setColorBorder(colorBorder)
                             .setColorFill(colorFill)
                             .bulid();
-                    pp.setDrawSquare(drawSquare);
-                    pp.repaint();
+                    paintPanel.setDrawSquare(drawSquare);
+                    paintPanel.repaint();
                 }
                 if (choiseTriangle()) {
-                    drawTriangle = pp.getDrawTriangle();
+                    drawTriangle = paintPanel.getDrawTriangle();
                     drawTriangle = new Triangle.BuilderTriangle()
                             .setX(me.getX())
                             .setY(me.getY())
@@ -113,11 +113,11 @@ public class Paint extends javax.swing.JFrame {
                             .setColorBorder(colorBorder)
                             .setColorFill(colorFill)
                             .bulid();
-                    pp.setDrawTriangle(drawTriangle);
-                    pp.repaint();
+                    paintPanel.setDrawTriangle(drawTriangle);
+                    paintPanel.repaint();
                 }
                 if (choiseArc()) {
-                    drawArc = pp.getDrawArc();
+                    drawArc = paintPanel.getDrawArc();
                     drawArc = new Arc.Builder()
                             .setXStart(me.getX())
                             .setYStart(me.getY())
@@ -126,11 +126,11 @@ public class Paint extends javax.swing.JFrame {
                             .setFill(fill)
                             .setColor(colorBorder)
                             .bulid();
-                    pp.setDrawArc(drawArc);
-                    pp.repaint();
+                    paintPanel.setDrawArc(drawArc);
+                    paintPanel.repaint();
                 }
                 if (choiseLine()) {
-                    drawLine = pp.getDrawLine();
+                    drawLine = paintPanel.getDrawLine();
                     drawLine = new Line.Builder()
                             .setXStart(me.getX())
                             .setYStart(me.getY())
@@ -139,11 +139,11 @@ public class Paint extends javax.swing.JFrame {
                             .setFill(fill)
                             .setColor(colorBorder)
                             .bulid();
-                    pp.setDrawLine(drawLine);
-                    pp.repaint();
+                    paintPanel.setDrawLine(drawLine);
+                    paintPanel.repaint();
                 }
                 if (choiseWheel()) {
-                    drawWheel = pp.getDrawWheel();
+                    drawWheel = paintPanel.getDrawWheel();
                     drawWheel = new Wheel.Builder()
                             .setX(me.getX())
                             .setY(me.getY())
@@ -152,8 +152,31 @@ public class Paint extends javax.swing.JFrame {
                             .setColorBorder(colorBorder)
                             .setColorFill(colorFill)
                             .bulid();
-                    pp.setDrawWheel(drawWheel);
-                    pp.repaint();
+                    paintPanel.setDrawWheel(drawWheel);
+                    paintPanel.repaint();
+                }
+                if ("point".equals(whatDraw)) {
+                    wC = paintPanel.whatFigureClicked(me.getX(), me.getY());
+                    if (wC.getId() >= 0) {
+                        if ("arc".equals(wC.getType())) {
+                            drawArc = (Arc) paintPanel.getObject(wC);
+                        }
+                        if ("rhomb".equals(wC.getType())) {
+                            drawRhomb = (Rhomb) paintPanel.getObject(wC);
+                        }
+                        if ("square".equals(wC.getType())) {
+                            drawSquare = (Square) paintPanel.getObject(wC);
+                        }
+                        if ("line".equals(wC.getType())) {
+                            drawLine = (Line) paintPanel.getObject(wC);
+                        }
+                        if ("triangle".equals(wC.getType())) {
+                            drawTriangle = (Triangle) paintPanel.getObject(wC);
+                        }
+                        if ("wheel".equals(wC.getType())) {
+                            drawWheel = (Wheel) paintPanel.getObject(wC);
+                        }
+                    }
                 }
 
             }
@@ -161,36 +184,35 @@ public class Paint extends javax.swing.JFrame {
             @Override
             public void mouseReleased(MouseEvent me) {
                 if (choiseSquare()) {
-                    pp.addObject(whatDraw, drawSquare);
+                    paintPanel.addObject(whatDraw, drawSquare);
                 }
                 if (choiseRhomb()) {
-                    pp.addObject(whatDraw, drawRhomb);
+                    paintPanel.addObject(whatDraw, drawRhomb);
                 }
                 if (choiseTriangle()) {
-                    pp.addObject(whatDraw, drawTriangle);
+                    paintPanel.addObject(whatDraw, drawTriangle);
                 }
                 if (choiseArc()) {
-                    pp.addObject(whatDraw, drawArc);
+                    paintPanel.addObject(whatDraw, drawArc);
                 }
                 if (choiseLine()) {
-                    pp.addObject(whatDraw, drawLine);
+                    paintPanel.addObject(whatDraw, drawLine);
                 }
                 if (choiseWheel()) {
-                    pp.addObject(whatDraw, drawWheel);
+                    paintPanel.addObject(whatDraw, drawWheel);
                 }
+                wC = new WhatClicked(-1, "");
             }
 
             @Override
             public void mouseEntered(MouseEvent me) {
-
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
-
             }
         });
-        pp.addMouseMotionListener(new MouseMotionListener() {
+        paintPanel.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent me) {
                 double tmpx = 0.0;
@@ -200,40 +222,70 @@ public class Paint extends javax.swing.JFrame {
                     tmpy = me.getY() - drawRhomb.getY();
                     drawRhomb.setWidth(tmpx);
                     drawRhomb.setHeight(tmpy);
-                    pp.setDrawRhomb(drawRhomb);
-                    pp.repaint();
+                    paintPanel.setDrawRhomb(drawRhomb);
+                    paintPanel.repaint();
                 }
                 if (choiseSquare()) {
                     tmpy = me.getY() - drawSquare.getY();
                     drawSquare.setWidth(tmpy);
-                    pp.setDrawSquare(drawSquare);
-                    pp.repaint();
+                    paintPanel.setDrawSquare(drawSquare);
+                    paintPanel.repaint();
                 }
                 if (choiseTriangle()) {
                     tmpx = me.getX() - drawTriangle.getX();
                     tmpy = me.getY() - drawTriangle.getY();
                     drawTriangle.setHeight(tmpy);
                     drawTriangle.setWidth(tmpx);
-                    pp.setDrawTriangle(drawTriangle);
-                    pp.repaint();
+                    paintPanel.setDrawTriangle(drawTriangle);
+                    paintPanel.repaint();
                 }
                 if (choiseArc()) {
                     drawArc.setxEnd(me.getX());
                     drawArc.setyEnd(me.getY());
-                    pp.setDrawArc(drawArc);
-                    pp.repaint();
+                    paintPanel.setDrawArc(drawArc);
+                    paintPanel.repaint();
                 }
                 if (choiseLine()) {
                     drawLine.setxEnd(me.getX());
                     drawLine.setyEnd(me.getY());
-                    pp.setDrawLine(drawLine);
-                    pp.repaint();
+                    paintPanel.setDrawLine(drawLine);
+                    paintPanel.repaint();
                 }
                 if (choiseWheel()) {
                     tmpx = me.getX() - drawWheel.getX();
                     drawWheel.setRadius(tmpx);
-                    pp.setDrawWheel(drawWheel);
-                    pp.repaint();
+                    paintPanel.setDrawWheel(drawWheel);
+                    paintPanel.repaint();
+                }
+                if ("point".equals(whatDraw)) {
+                    if (wC.getId() >= 0) {
+                        if ("arc".equals(wC.getType())) {
+                            drawArc.setxEnd(me.getX());
+                            drawArc.setyEnd(me.getY());
+                            paintPanel.setObject(wC, drawArc);
+                        }
+                        if ("rhomb".equals(wC.getType())) {
+                            drawRhomb.setXY(me.getX(), me.getY());
+                            paintPanel.setObject(wC, drawRhomb);
+                        }
+                        if ("square".equals(wC.getType())) {
+                            drawSquare.setXY(me.getX(), me.getY());
+                            paintPanel.setObject(wC, drawSquare);
+                        }
+                        if ("line".equals(wC.getType())) {
+                            drawLine.setxEnd(me.getX());
+                            drawLine.setyEnd(me.getY());
+                            paintPanel.setObject(wC, drawLine);
+                        }
+                        if ("triangle".equals(wC.getType())) {
+                            drawTriangle.setXY(me.getX(), me.getY());
+                            paintPanel.setObject(wC, drawTriangle);
+                        }
+                        if ("wheel".equals(wC.getType())) {
+                            drawWheel.setXY(me.getX(), me.getY());
+                            paintPanel.setObject(wC, drawWheel);
+                        }
+                    }
                 }
             }
 
@@ -280,11 +332,12 @@ public class Paint extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
-        jToggleButton3 = new javax.swing.JToggleButton();
+        rhombBtn = new javax.swing.JToggleButton();
         jToggleButton4 = new javax.swing.JToggleButton();
         jToggleButton5 = new javax.swing.JToggleButton();
         jToggleButton6 = new javax.swing.JToggleButton();
         jToggleButton7 = new javax.swing.JToggleButton();
+        removeObj = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
@@ -319,11 +372,11 @@ public class Paint extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup1.add(jToggleButton3);
-        jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/rhomb.png"))); // NOI18N
-        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(rhombBtn);
+        rhombBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/rhomb.png"))); // NOI18N
+        rhombBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton3ActionPerformed(evt);
+                rhombBtnActionPerformed(evt);
             }
         });
 
@@ -359,29 +412,39 @@ public class Paint extends javax.swing.JFrame {
             }
         });
 
+        removeObj.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/Resourse/delete.png"))); // NOI18N
+        removeObj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeObjActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel1))
+                        .addGap(2, 2, 2)
+                        .addComponent(removeObj, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
-                        .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(rhombBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -391,19 +454,17 @@ public class Paint extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rhombBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addContainerGap())
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(removeObj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(0, 0, 0));
@@ -496,7 +557,7 @@ public class Paint extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 140, Short.MAX_VALUE))
+                .addGap(0, 136, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -548,9 +609,9 @@ public class Paint extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
+    private void rhombBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rhombBtnActionPerformed
         whatDraw = "rhomb";
-    }//GEN-LAST:event_jToggleButton3ActionPerformed
+    }//GEN-LAST:event_rhombBtnActionPerformed
 
     private void jToggleButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton6ActionPerformed
         whatDraw = "square";
@@ -574,9 +635,9 @@ public class Paint extends javax.swing.JFrame {
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         if ("point".equals(whatDraw)) {
-            fill = pp.isFillObject(wC);
+            fill = paintPanel.isFillObject(wC);
             fill = !fill;
-            pp.setFill(wC, fill);
+            paintPanel.setFill(wC, fill);
         } else {
             fill = !fill;
         }
@@ -591,12 +652,12 @@ public class Paint extends javax.swing.JFrame {
         jPanel4.setBackground(newColor);
         colorBorder = newColor;
         if ("point".equals(whatDraw)) {
-            pp.setColorBorder(wC, newColor);
+            paintPanel.setColorBorder(wC, newColor);
         }
     }//GEN-LAST:event_jPanel4MouseClicked
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Win.jSize.run(pp);
+        Win.jSize.run(paintPanel);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
@@ -607,7 +668,7 @@ public class Paint extends javax.swing.JFrame {
         jPanel5.setBackground(newColor);
         colorFill = newColor;
         if ("point".equals(whatDraw)) {
-            pp.setFillColor(wC, newColor);
+            paintPanel.setFillColor(wC, newColor);
         }
     }//GEN-LAST:event_jPanel5MouseClicked
 
@@ -616,7 +677,7 @@ public class Paint extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButton7ActionPerformed
 
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
-        pp.wipe();
+        paintPanel.wipe();
     }//GEN-LAST:event_clearActionPerformed
 
     private void saveAsJPGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsJPGActionPerformed
@@ -645,7 +706,7 @@ public class Paint extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(saveDialog);
         if (saveDialog.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = saveDialog.getSelectedFile();
-            pp.saveToPdf(selectedFile);
+            paintPanel.saveToPdf(selectedFile);
         }
     }//GEN-LAST:event_saveAsJPGActionPerformed
 
@@ -676,12 +737,20 @@ public class Paint extends javax.swing.JFrame {
         if (otworz.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = otworz.getSelectedFile();
             try {
-                pp.loadImage(file);
+                paintPanel.loadImage(file);
             } catch (IOException ex) {
                 Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_openFileActionPerformed
+
+    private void removeObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeObjActionPerformed
+      int dialogButton = JOptionPane.YES_NO_OPTION;
+            JOptionPane.showConfirmDialog (null, "Czy usunąć zaznaczony element?","Ostrzeżenie", dialogButton);
+            if(dialogButton == JOptionPane.YES_OPTION) {
+                paintPanel.deleteObject(wC);
+              }
+    }//GEN-LAST:event_removeObjActionPerformed
 
     /**
      * @param args the command line arguments
@@ -744,12 +813,13 @@ public class Paint extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
-    private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JToggleButton jToggleButton4;
     private javax.swing.JToggleButton jToggleButton5;
     private javax.swing.JToggleButton jToggleButton6;
     private javax.swing.JToggleButton jToggleButton7;
     private javax.swing.JMenuItem openFile;
+    private javax.swing.JButton removeObj;
+    private javax.swing.JToggleButton rhombBtn;
     private javax.swing.JMenuItem saveAsJPG;
     // End of variables declaration//GEN-END:variables
 }
